@@ -2,149 +2,215 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Phuza auction - R50 Deposit Wallet</title>
+<title>BID.CO.ZA - WhatsApp Alerts</title>
 <style>
 body{background:#0a0a0a;color:#fff;font-family:Arial;margin:0;padding:0 14px 100px}
-.header{background:#000;padding:14px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #f5c518;position:sticky;top:0;z-index:10}
+.header{background:#000;padding:14px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #f5c518;position:sticky;top:0;z-index:20}
 .logo{color:#f5c518;font-weight:900;font-size:18px;display:flex;gap:8px;align-items:center}
-.logo-icon{width:32px;height:32px;background:#f5c518;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#000}
 .card{background:#151515;border-radius:14px;padding:14px;margin:12px 0;border:1px solid #2a2a2a}
-.btn{background:#f5c518;color:#000;border:0;padding:12px;border-radius:10px;font-weight:900;width:100%;cursor:pointer;margin-top:8px}
-.btn2{background:#222;color:#fff;border:1px solid #444;padding:10px;border-radius:10px;font-weight:700;width:100%;cursor:pointer;margin-top:8px}
-.btn:disabled{background:#333;color:#666;cursor:not-allowed}
-.small{font-size:12px;color:#999} .locked{background:#300;border:2px solid #f00;padding:12px;border-radius:10px;text-align:center;margin:10px 0}
-input,select{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#000;color:#fff;margin:6px 0;box-sizing:border-box}
-.tab{display:flex;gap:6px;margin:10px 0}.tab div{flex:1;text-align:center;padding:10px;border-radius:10px;background:#222;cursor:pointer;font-weight:900;font-size:11px}.tab .active{background:#f5c518;color:#000}
-#biddingSection,#companySection,#verifySection,#walletLock{display:none}
-.badge{background:#222;padding:4px 8px;border-radius:12px;font-size:11px}
+.btn{background:#f5c518;color:#000;border:0;padding:14px;border-radius:10px;font-weight:900;width:100%;cursor:pointer;margin-top:8px}
+.btn2{background:#222;color:#fff;border:1px solid #444;padding:12px;border-radius:10px;font-weight:700;width:100%;cursor:pointer;margin-top:8px}
+.portal{border-radius:16px;padding:20px;margin:12px 0;text-align:center;cursor:pointer}
+.portalBuyer{background:linear-gradient(135deg,#151515,#1a1a00);border:3px solid #f5c518}
+.portalSeller{background:linear-gradient(135deg,#151515,#001a1a);border:3px solid #00ffff}
+.portalAdmin{background:#111;border:1px dashed #444}
+input{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#000;color:#fff;margin:6px 0;box-sizing:border-box}
+.small{font-size:12px;color:#999}
+#buyerArea,#sellerArea,#adminArea,#verifySection,#walletLock{display:none}
 .live-dot{width:8px;height:8px;background:#0f0;border-radius:50%;display:inline-block;animation:blink 1s infinite}@keyframes blink{50%{opacity:0}}
+.locked{background:#300;border:2px solid #f00;padding:12px;border-radius:10px;text-align:center;margin:10px 0}
+.wa-alert{background:#25D366;color:#fff;padding:8px;border-radius:8px;font-size:12px;text-align:center;margin:8px 0}
 </style>
 </head>
 <body>
-<div class="header"><div class="logo"><div class="logo-icon">🥃</div>BID.CO.ZA</div><div style="font-size:11px">👤<span id="hName"></span> • R<span id="hBal">0</span></div></div>
+<div class="header"><div class="logo">🥃 BID.CO.ZA</div><div style="font-size:11px">R<span id="hBal">0</span> • WhatsApp Alerts ON ✅</div></div>
 
-<div class="tab">
-<div id="tabBuyer" class="active" onclick="switchTab('buyer')">🛒 BUYER</div>
-<div id="tabSeller" onclick="switchTab('seller')">🏪 SELLER</div>
-<div id="tabAdmin" onclick="switchTab('admin')">🔐 ADMIN</div>
+<div id="landing">
+<h2 style="text-align:center;color:#f5c518">BID.CO.ZA - Choose Portal</h2>
+
+<div class="portal portalBuyer" onclick="openPortal('buyer')">
+<div style="font-size:50px">🛒</div><h2 style="color:#f5c518">BUYER PORTAL</h2>
+<p class="small">WhatsApp + Name only → R50 Deposit → Bid</p>
+<button class="btn">Enter Buyer →</button>
 </div>
 
-<!-- BUYER AUTH - SIMPLE -->
-<div id="authSection">
-<div class="card" id="regCard" style="border:2px solid #f5c518">
-<h2>📝 Quick Register</h2>
-<p class="small">Only Name + WhatsApp to join. But need R50 deposit via admin to bid!</p>
-<input id="regName" placeholder="Full Name *"><input id="regWA" placeholder="WhatsApp 0821234567 *" type="tel"><input id="regPass" type="password" placeholder="Password *">
-<button class="btn" onclick="quickRegister()">Register</button>
-<p class="small" style="text-align:center">Have account? <a href="#" onclick="showLogin()" style="color:#f5c518">Login</a></p><p id="regMsg" class="small"></p></div>
-<div class="card" id="loginCard" style="display:none;border:2px solid #f5c518">
-<h2>🔐 Login</h2><input id="logWA" placeholder="WhatsApp"><input id="logPass" type="password" placeholder="Password"><button class="btn" onclick="loginUser()">Login</button>
-<p class="small" style="text-align:center"><a href="#" onclick="showRegister()" style="color:#f5c518">New? Register</a></p><p id="logMsg" class="small"></p></div>
-<div class="card" id="profileCard" style="display:none;border:1px solid #0f0"><b>👤 <span id="profName"></span></b> <span class="small">• <span id="profWA"></span> • <a href="#" onclick="logout()" style="color:#999">Logout</a></span></div>
+<div class="portal portalSeller" onclick="openPortal('seller')">
+<div style="font-size:50px">🏪</div><h2 style="color:#00ffff">SELLER PORTAL</h2>
+<p class="small">Company + License → Admin Approval → Post bottles</p>
+<button class="btn" style="background:#00ffff;color:#000">Enter Seller →</button>
 </div>
 
-<!-- WALLET LOCK - R50 DEPOSIT REQUIRED -->
-<div id="walletLock" class="card locked">
-<h2 style="color:#ff6b6b">🔒 ALCOHOL WALLET - R50 DEPOSIT REQUIRED</h2>
-<p>You have R<span id="lockBal">0.00</span> - Need minimum R50 to start bidding!</p>
-<p class="small">SA Rule: All bidders must have deposit to prevent fake bids. Deposit via admin.</p>
-<div style="background:#000;padding:12px;border-radius:10px;margin:10px 0;text-align:left">
-<h4 style="color:#f5c518;margin:5px 0">💳 How to Add R50:</h4>
-<p class="small">1. Buy 1Voucher R50 at Shoprite/Boxer/Pick n Pay<br>2. Enter PIN below<br>3. Admin will verify & add to wallet in 10 mins<br>4. WhatsApp 0789313670 for help</p>
-<input id="depAmount" type="number" placeholder="Amount - Min R50 *" value="50">
-<input id="depPin" placeholder="1Voucher PIN - 16 digits *">
-<input id="depRef" placeholder="Your Name for reference *">
-<button class="btn" style="background:#0f0;color:#000" onclick="requestDeposit()">📤 Request R50 Deposit to Admin</button>
-<p id="depMsg" class="small"></p>
+<div class="portal portalAdmin" onclick="openPortal('admin')">
+<h3>🔐 ADMIN - WhatsApp Alerts</h3><p class="small">Admin gets WhatsApp for every deposit, company, win</p><button class="btn2">Admin Login</button>
+</div>
+</div>
+
+<!-- BUYER AREA -->
+<div id="buyerArea">
+<button class="btn2" onclick="goHome()" style="width:auto">← Back</button>
+<h2 style="color:#f5c518">🛒 BUYER PORTAL</h2>
+<div id="buyerAuth">
+<div class="card" id="buyerRegCard" style="border:2px solid #f5c518"><h3>Buyer Register</h3><input id="bRegName" placeholder="Full Name *"><input id="bRegWA" placeholder="WhatsApp 082... *"><input id="bRegPass" type="password" placeholder="Password *"><button class="btn" onclick="buyerRegister()">Register as Buyer</button><p class="small" style="text-align:center"><a href="#" onclick="showBuyerLogin()" style="color:#f5c518">Login</a></p><p id="bRegMsg" class="small"></p></div>
+<div class="card" id="buyerLoginCard" style="display:none;border:2px solid #f5c518"><h3>Buyer Login</h3><input id="bLogWA" placeholder="WhatsApp"><input id="bLogPass" type="password" placeholder="Password"><button class="btn" onclick="buyerLogin()">Login</button><p class="small" style="text-align:center"><a href="#" onclick="showBuyerReg()" style="color:#f5c518">Register</a></p><p id="bLogMsg" class="small"></p></div>
+<div class="card" id="buyerProfileCard" style="display:none;border:1px solid #0f0"><b>🛒 <span id="bProfName"></span></b> • <span id="bProfWA"></span> • <a href="#" onclick="buyerLogout()" style="color:#999">Logout</a></div>
+</div>
+
+<div id="walletLock" class="locked">
+<h3 style="color:#ff6b6b">🔒 R50 DEPOSIT REQUIRED</h3>
+<p>Balance R<span id="lockBal">0.00</span> - Need R50 min to bid</p>
+<div style="background:#000;padding:12px;border-radius:10px;text-align:left">
+<p class="small">Buy 1Voucher R50 at Shoprite → Enter PIN → Admin gets WhatsApp alert & approves</p>
+<input id="depAmount" type="number" value="50"><input id="depPin" placeholder="1Voucher PIN 16 digits *"><input id="depRef" placeholder="Your Name *">
+<button class="btn" style="background:#0f0;color:#000" onclick="requestDeposit()">📤 Request + WhatsApp Admin</button><p id="depMsg" class="small"></p>
+<div id="waPreview" class="wa-alert" style="display:none"></div>
 </div>
 <div id="pendingDepList" class="small" style="background:#000;padding:8px;border-radius:8px;margin-top:8px"></div>
 </div>
 
-<!-- VERIFY AFTER WIN -->
-<div id="verifySection" class="card" style="border:3px solid #f00;background:#200">
-<h2 style="color:#ff6b6b">🚨 WINNER - VERIFY ID TO PAY!</h2>
-<p>🏆 Won <b id="vBottle"></b> for R<b id="vPrice"></b></p>
-<p class="small">Must verify ID + Address before delivery - 18+ FICA</p>
-<input id="vID" placeholder="SA ID 13 digits *" maxlength="13" oninput="checkAge(this.value)"><span id="vAgeCheck" class="small"></span>
-<input id="vAddress" placeholder="Delivery Address *"><div style="display:flex;gap:8px;margin-top:8px"><input type="checkbox" id="vAgree" style="width:auto"><span class="small">I am 18+ & details true *</span></div>
-<button class="btn" style="background:#0f0" onclick="submitVerification()">✅ Verify & Pay</button><button class="btn2" onclick="cancelWin()">❌ Cancel (1 Strike)</button><p id="vMsg" class="small"></p>
+<div id="verifySection" class="card" style="border:3px solid #f00;background:#200"><h3 style="color:#ff6b6b">🚨 WINNER - Verify ID!</h3><p>Won <b id="vBottle"></b> for R<b id="vPrice"></b></p><input id="vID" placeholder="SA ID 13 digits *" maxlength="13" oninput="checkAge(this.value)"><span id="vAgeCheck" class="small"></span><input id="vAddress" placeholder="Delivery Address *"><div style="display:flex;gap:8px;margin-top:8px"><input type="checkbox" id="vAgree" style="width:auto"><span class="small">I am 18+ *</span></div><button class="btn" style="background:#0f0" onclick="submitVerification()">✅ Verify & Pay</button><button class="btn2" onclick="cancelWin()">❌ Cancel</button><p id="vMsg" class="small"></p></div>
+
+<div id="buyerBidding">
+<div class="card" style="border:2px solid #f5c518"><h3>💳 Wallet - R50 Protected</h3><div style="background:#000;padding:12px;border-radius:12px;text-align:center">R<b id="balance" style="font-size:26px;color:#f5c518">0.00</b><div id="debtBox" style="display:none;background:#300;padding:10px;border-radius:8px;margin-top:8px;border:1px solid #f00">Pay R<span id="debt"></span> for <span id="debtBottle"></span><br>⏰ <b id="timer">23:59:59</b><br><button class="btn" style="background:#0f0;padding:8px" onclick="payDebt()">Pay</button></div><div class="small">Strikes <span id="strikeInfo">0/3</span> • <span id="verifiedStatus">❌</span></div></div><button class="btn2" onclick="document.getElementById('walletLock').style.display='block'">+ Request Credit</button><div id="txList" class="small" style="background:#000;padding:8px;border-radius:8px;margin-top:8px;max-height:100px;overflow:auto"></div></div>
+<h3>🔥 Live Auctions</h3><div id="liveList"></div>
+</div>
 </div>
 
-<!-- BIDDING - ONLY IF R50+ -->
-<div id="biddingSection">
-<div class="card" style="border:2px solid #f5c518"><h3>💳 Alcohol Wallet - Deposit Protected</h3>
-<div style="background:#000;padding:12px;border-radius:12px;text-align:center"><span class="small">Available to Bid (Min R50)</span><br><b style="font-size:26px;color:#f5c518">R<span id="balance">0.00</span></b>
-<div id="debtBox" style="display:none;background:#300;padding:10px;border-radius:8px;margin-top:8px;border:1px solid #f00">🏆 PAY R<span id="debt"></span> for <span id="debtBottle"></span><br>⏰ <b id="timer">23:59:59</b><br><button class="btn" style="background:#0f0;padding:8px" onclick="payDebt()">Pay from Wallet</button></div>
-<div class="small">Strikes: <span id="strikeInfo">0/3</span> • Verified: <span id="verifiedStatus">❌</span></div></div>
-<button class="btn2" onclick="requestDepositForm()">+ Request More Credit via Admin</button><div id="txList" class="small" style="background:#000;padding:8px;border-radius:8px;margin-top:8px;max-height:100px;overflow:auto"></div></div>
-<h2>🔥 Live Auctions - Durban</h2><div id="liveList"></div>
+<!-- SELLER AREA -->
+<div id="sellerArea">
+<button class="btn2" onclick="goHome()" style="width:auto">← Back</button>
+<h2 style="color:#00ffff">🏪 SELLER PORTAL</h2>
+<div id="sellerAuth">
+<div class="card" id="sellerRegCard" style="border:2px solid #00ffff"><h3>Company Register</h3><input id="sRegName" placeholder="Company Name *"><input id="sRegNo" placeholder="Reg No *"><input id="sRegLicense" placeholder="Liquor License *"><input id="sRegOwner" placeholder="Owner Name *"><input id="sRegWA" placeholder="Company WhatsApp *"><input id="sRegAddr" placeholder="Shop Address *"><input id="sRegPass" type="password" placeholder="Password *"><button class="btn" style="background:#00ffff;color:#000" onclick="sellerRegister()">Submit + WhatsApp Admin</button><p id="sRegMsg" class="small"></p><p class="small" style="text-align:center"><a href="#" onclick="showSellerLogin()" style="color:#00ffff">Login</a></p></div>
+<div class="card" id="sellerLoginCard" style="display:none"><h3>Seller Login</h3><input id="sLogWA" placeholder="Company WhatsApp"><input id="sLogPass" type="password" placeholder="Password"><button class="btn" style="background:#00ffff;color:#000" onclick="sellerLogin()">Login</button><p class="small" style="text-align:center"><a href="#" onclick="showSellerReg()" style="color:#00ffff">Register Company</a></p><p id="sLogMsg" class="small"></p></div>
+<div class="card" id="sellerProfileCard" style="display:none;border:1px solid #00ffff"><b>🏪 <span id="sProfName"></span></b> - <span id="sProfStatus"></span><br><span class="small" id="sProfLicense"></span> • <a href="#" onclick="sellerLogout()" style="color:#999">Logout</a></div>
+</div>
+<div id="sellerDash" style="display:none"><div class="card"><h3>➕ Post Bottle</h3><input id="bName" placeholder="Bottle Name *"><input id="bPrice" type="number" placeholder="Price R *"><input id="bStock" type="number" placeholder="Stock *"><button class="btn" style="background:#00ffff;color:#000" onclick="postBottle()">Submit for Admin Approval + WhatsApp Alert</button><p id="bMsg" class="small"></p></div><div class="card"><h3>📦 My Bottles</h3><div id="myBottles" class="small"></div></div></div>
 </div>
 
-<!-- COMPANY -->
-<div id="companySection">
-<div class="card" id="compRegCard" style="border:2px solid #0ff"><h2>🏪 Company Registration</h2><p class="small">Must have Liquor License - Admin approval required</p>
-<input id="cName" placeholder="Company Name *"><input id="cReg" placeholder="Reg No *"><input id="cLicense" placeholder="Liquor License *"><input id="cOwner" placeholder="Owner Name *"><input id="cWA" placeholder="Company WhatsApp *"><input id="cAddress" placeholder="Shop Address *"><input id="cPass" type="password" placeholder="Password *">
-<button class="btn" style="background:#0ff;color:#000" onclick="registerCompany()">Submit for Admin Approval</button><p id="cMsg" class="small"></p></div>
-<div class="card" id="compLoginCard" style="display:none"><h3>🏪 Company Login</h3><input id="cLogWA" placeholder="Company WhatsApp"><input id="cLogPass" type="password" placeholder="Password"><button class="btn" style="background:#0ff;color:#000" onclick="loginCompany()">Login</button><p class="small" style="text-align:center"><a href="#" onclick="showCompReg()" style="color:#0ff">New Company? Register</a></p></div>
-<div id="compDashboard" style="display:none"><div class="card" style="border:1px solid #0ff"><b id="compNameShow"></b> - <span id="compStatus"></span><br><span class="small" id="compLicenseShow"></span></div>
-<div class="card"><h3>➕ Post Bottle</h3><input id="bName" placeholder="Bottle Name *"><input id="bPrice" type="number" placeholder="Starting Price R *"><input id="bStock" type="number" placeholder="Stock *"><button class="btn" style="background:#0ff;color:#000" onclick="postBottle()">Submit - Wait Admin</button><p id="bMsg" class="small"></p></div><div class="card"><h3>📦 My Bottles</h3><div id="myBottles" class="small"></div></div></div>
-</div>
-
-<!-- ADMIN PANEL -->
-<div id="adminSection" style="display:none">
-<div class="card" style="border:2px solid #f00"><h2>🔐 Admin - Approve All</h2><input id="adminPass" type="password" placeholder="Admin Password: admin123"><button class="btn" style="background:#f00;color:#fff" onclick="adminLogin()">Unlock</button></div>
+<!-- ADMIN AREA -->
+<div id="adminArea">
+<button class="btn2" onclick="goHome()" style="width:auto">← Back</button>
+<h2 style="color:#ff6b6b">🔐 ADMIN - WhatsApp Alerts</h2>
+<div class="card" style="border:2px solid #f00"><h3>Admin Login</h3><input id="adminPass" type="password" placeholder="admin123"><button class="btn" style="background:#f00;color:#fff" onclick="adminLogin()">Unlock</button><p class="small">Admin WhatsApp: <b id="adminWADisplay"></b> - Change in code</p></div>
 <div id="adminContent" style="display:none">
-<div class="card" style="border:2px solid #0f0"><h3>💰 Deposit Requests - R50 Wallet (MOST IMPORTANT)</h3><p class="small">Buyers requesting R50 deposit - Verify 1Voucher PIN then approve</p><div id="pendingDeposits"></div></div>
-<div class="card"><h3>🏪 Companies Pending</h3><div id="pendingCompanies"></div></div>
-<div class="card"><h3>🍾 Bottles Pending</h3><div id="pendingBottles"></div></div>
-<div class="card"><h3>👥 Buyer Verifications</h3><div id="pendingVerifs"></div></div>
+<div class="card" style="border:2px solid #0f0"><h3>💰 1. Deposits - WhatsApp Alerted</h3><div id="pendingDeposits"></div></div>
+<div class="card" style="border:2px solid #00ffff"><h3>🏪 2. Companies</h3><div id="pendingCompanies"></div></div>
+<div class="card" style="border:2px solid #f5c518"><h3>🍾 3. Bottles</h3><div id="pendingBottles"></div></div>
+<div class="card"><h3>👥 4. ID Verifications</h3><div id="pendingVerifs"></div></div>
+<div class="card"><h3>📊 Stats</h3><div id="adminStats" class="small"></div></div>
 </div>
 </div>
 
 <script>
+// ===== CONFIG - CHANGE ADMIN WHATSAPP HERE =====
+const ADMIN_WA = "27789313670"; // Your number - 27 not 0
+document.getElementById('adminWADisplay').innerText = ADMIN_WA;
+
 let wallet=JSON.parse(localStorage.getItem('bid_wallet')||'{"balance":0,"debt":0,"debtBottle":"","debtPrice":0,"debtExpiry":0,"tx":[]}');
 let strikes=JSON.parse(localStorage.getItem('bid_strikes')||'{"count":0,"fine":0}');
 let companies=JSON.parse(localStorage.getItem('bid_companies')||'{}');
 let bottles=JSON.parse(localStorage.getItem('bid_bottles')||'[]');
 let verifs=JSON.parse(localStorage.getItem('bid_verifs')||'{}');
 let deposits=JSON.parse(localStorage.getItem('bid_deposits')||'[]');
-if(bottles.length==0){bottles=[{id:1,name:"Jameson 750ml",price:350,company:"Sipho's Cellar",companyWA:"27820000001",auth:"94",approved:true,live:true,ends:Date.now()+2*3600000},{id:2,name:"Bells 1L",price:790,company:"Durban Liquor Hub",companyWA:"27820000002",auth:"Good Deal",approved:true,live:true,ends:Date.now()+45*60*1000}];}
+if(bottles.length==0){bottles=[{id:1,name:"Jameson 750ml",price:350,company:"Sipho's Cellar",companyWA:"27820000001",auth:"94",approved:true,live:true,ends:Date.now()+2*3600000,stock:12},{id:2,name:"Bells 1L",price:790,company:"Durban Liquor Hub",companyWA:"27820000002",auth:"Good Deal",approved:true,live:true,ends:Date.now()+45*60*1000,stock:6}];}
 function save(){localStorage.setItem('bid_wallet',JSON.stringify(wallet));localStorage.setItem('bid_strikes',JSON.stringify(strikes));localStorage.setItem('bid_companies',JSON.stringify(companies));localStorage.setItem('bid_bottles',JSON.stringify(bottles));localStorage.setItem('bid_verifs',JSON.stringify(verifs));localStorage.setItem('bid_deposits',JSON.stringify(deposits));}
-function switchTab(t){['biddingSection','companySection','adminSection','authSection','verifySection','walletLock'].forEach(id=>{let e=document.getElementById(id);if(e)e.style.display='none';});document.querySelectorAll('.tab div').forEach(d=>d.classList.remove('active'));if(t=='buyer'){document.getElementById('authSection').style.display='block';let wa=localStorage.getItem('bid_current_user');if(wa){checkWalletLock();}document.getElementById('tabBuyer').classList.add('active');}else if(t=='seller'){document.getElementById('companySection').style.display='block';document.getElementById('tabSeller').classList.add('active');}else if(t=='admin'){document.getElementById('adminSection').style.display='block';document.getElementById('tabAdmin').classList.add('active');}}
-function checkWalletLock(){let wa=localStorage.getItem('bid_current_user');if(!wa)return;document.getElementById('authSection').style.display='block';showProfile();let bal=wallet.balance;document.getElementById('lockBal').innerText=bal.toFixed(2);if(bal<50){document.getElementById('walletLock').style.display='block';document.getElementById('biddingSection').style.display='none';document.getElementById('verifySection').style.display='none';renderPendingDepForUser();}else{document.getElementById('walletLock').style.display='none';document.getElementById('biddingSection').style.display='block';if(wallet.debt>0&&!verifs[wa+'_verified']){document.getElementById('verifySection').style.display='block';document.getElementById('vBottle').innerText=wallet.debtBottle;document.getElementById('vPrice').innerText=wallet.debtPrice;}renderLive();}renderWallet();}
-function renderLive(){let div=document.getElementById('liveList');div.innerHTML=bottles.filter(b=>b.approved).map(b=>`<div class="card" style="border-left:4px solid #0f0"><b>🥃 ${b.name}</b> - <b style="color:#f5c518">R${b.price}</b> <span class="badge">AI ${b.auth}%</span><br><span class="small">${b.company} • <span class="live-dot"></span> LIVE • Ends <span class="timerLive" data-ends="${b.ends}">${Math.floor((b.ends-Date.now())/60000)}m</span></span><br><button class="btn" ${wallet.balance<50?'disabled':''} onclick="placeBid('${b.name}',${b.price})">${wallet.balance<50?'🔒 Need R50 Deposit':'Bid R'+(b.price+10)}</button></div>`).join('')||'<p class="small">No live auctions</p>';}
-function renderWallet(){document.getElementById('balance').innerText=wallet.balance.toFixed(2);let hb=document.getElementById('hBal');if(hb)hb.innerText=wallet.balance.toFixed(0);document.getElementById('txList').innerHTML=wallet.tx.slice(-6).reverse().map(t=>`${t.time} - ${t.desc}`).join('<br>')||'No activity';let s=document.getElementById('strikeInfo');if(s)s.innerText=`${strikes.count}/3`;let vs=document.getElementById('verifiedStatus');let wa=localStorage.getItem('bid_current_user');if(verifs[wa+'_verified'])vs.innerHTML='✅ Verified';else vs.innerHTML='❌ Verify after win';if(wallet.debt>0){document.getElementById('debtBox').style.display='block';document.getElementById('debt').innerText=wallet.debtPrice;document.getElementById('debtBottle').innerText=wallet.debtBottle;let left=wallet.debtExpiry-Date.now();if(left<=0){wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`❌ Failed pay R${wallet.debtPrice} - STRIKE`});strikes.count++;if(strikes.count>=3)strikes.fine=100;wallet.debt=0;save();}else{let h=Math.floor(left/3600000),m=Math.floor((left%3600000)/60000),sc=Math.floor((left%60000)/1000);document.getElementById('timer').innerText=`${h}:${m}:${sc}`;}}else{let db=document.getElementById('debtBox');if(db)db.style.display='none';}}
+
+// WhatsApp alert function
+function sendWAAlert(message){
+let url = `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(message)}`;
+window.open(url, '_blank');
+let preview = document.getElementById('waPreview');
+if(preview){preview.style.display='block';preview.innerHTML=`📱 WhatsApp alert sent to admin ${ADMIN_WA}:<br><i>${message.slice(0,100)}...</i>`;}
+}
+
+function goHome(){['buyerArea','sellerArea','adminArea'].forEach(id=>document.getElementById(id).style.display='none');document.getElementById('landing').style.display='block';}
+function openPortal(p){document.getElementById('landing').style.display='none';if(p=='buyer'){document.getElementById('buyerArea').style.display='block';let wa=localStorage.getItem('bid_current_user');if(wa){showBuyerProfile();checkWalletLock();}}else if(p=='seller'){document.getElementById('sellerArea').style.display='block';let wa=localStorage.getItem('bid_current_company');if(wa)showSellerDash();}else if(p=='admin'){document.getElementById('adminArea').style.display='block';}}
+function checkWalletLock(){let wa=localStorage.getItem('bid_current_user');if(!wa)return;let bal=wallet.balance;document.getElementById('lockBal').innerText=bal.toFixed(2);document.getElementById('hBal').innerText=bal.toFixed(0);if(bal<50){document.getElementById('walletLock').style.display='block';document.getElementById('buyerBidding').style.display='none';document.getElementById('verifySection').style.display='none';renderPendingDepForUser();}else{document.getElementById('walletLock').style.display='none';document.getElementById('buyerBidding').style.display='block';if(wallet.debt>0&&!verifs[wa+'_verified']){document.getElementById('verifySection').style.display='block';document.getElementById('vBottle').innerText=wallet.debtBottle;document.getElementById('vPrice').innerText=wallet.debtPrice;}renderLive();}renderWallet();}
+function renderLive(){let div=document.getElementById('liveList');div.innerHTML=bottles.filter(b=>b.approved).map(b=>`<div class="card" style="border-left:4px solid #0f0"><b>🥃 ${b.name}</b> - <b style="color:#f5c518">R${b.price}</b> - Stock ${b.stock}<br><span class="small">${b.company} • <span class="live-dot"></span> LIVE • Ends <span class="timerLive" data-ends="${b.ends}">${Math.floor((b.ends-Date.now())/60000)}m</span></span><br><button class="btn" ${wallet.balance<50?'disabled':''} onclick="placeBid('${b.name}',${b.price})">${wallet.balance<50?'🔒 Need R50':'Bid R'+(b.price+10)}</button></div>`).join('')||'No live bottles';}
+function renderWallet(){document.getElementById('balance').innerText=wallet.balance.toFixed(2);document.getElementById('hBal').innerText=wallet.balance.toFixed(0);document.getElementById('txList').innerHTML=wallet.tx.slice(-6).reverse().map(t=>`${t.time} - ${t.desc}`).join('<br>')||'No activity';document.getElementById('strikeInfo').innerText=`${strikes.count}/3`;document.getElementById('verifiedStatus').innerHTML=verifs[localStorage.getItem('bid_current_user')+'_verified']?'✅ Verified':'❌ Not verified';if(wallet.debt>0){document.getElementById('debtBox').style.display='block';document.getElementById('debt').innerText=wallet.debtPrice;document.getElementById('debtBottle').innerText=wallet.debtBottle;let left=wallet.debtExpiry-Date.now();if(left<=0){wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`❌ Failed pay - STRIKE`});strikes.count++;wallet.debt=0;save();}else{let h=Math.floor(left/3600000),m=Math.floor((left%3600000)/60000),s=Math.floor((left%60000)/1000);document.getElementById('timer').innerText=`${h}:${m}:${s}`;}}else{let db=document.getElementById('debtBox');if(db)db.style.display='none';}}
 setInterval(()=>{renderWallet();document.querySelectorAll('.timerLive').forEach(el=>{let ends=parseInt(el.dataset.ends);let left=ends-Date.now();if(left<=0)el.innerText='ENDED';else{let h=Math.floor(left/3600000),m=Math.floor((left%3600000)/60000),s=Math.floor((left%60000)/1000);el.innerText=`${h}:${m}:${s}`;}});},1000);renderWallet();
-function quickRegister(){let n=document.getElementById('regName').value.trim(),wa=document.getElementById('regWA').value.trim(),p=document.getElementById('regPass').value.trim();if(!n||!wa||!p)return alert('Fill all');localStorage.setItem('bid_user_'+wa,JSON.stringify({name:n,whatsapp:wa,password:p}));localStorage.setItem('bid_current_user',wa);document.getElementById('regMsg').innerHTML=`✅ Welcome ${n} - Now add R50 deposit!`;setTimeout(()=>{checkWalletLock();},800);}
-function loginUser(){let wa=document.getElementById('logWA').value.trim(),p=document.getElementById('logPass').value;let d=localStorage.getItem('bid_user_'+wa);if(!d)return document.getElementById('logMsg').innerText='❌ Not found';let u=JSON.parse(d);if(u.password!==p)return document.getElementById('logMsg').innerText='❌ Wrong pass';localStorage.setItem('bid_current_user',wa);checkWalletLock();}
-function showProfile(){let wa=localStorage.getItem('bid_current_user');if(!wa)return showRegister();let u=JSON.parse(localStorage.getItem('bid_user_'+wa)||'{}');document.getElementById('regCard').style.display='none';document.getElementById('loginCard').style.display='none';document.getElementById('profileCard').style.display='block';document.getElementById('profName').innerText=u.name;document.getElementById('profWA').innerText=u.whatsapp;document.getElementById('hName').innerText=' '+u.name.split(' ')[0];}
-function showLogin(){document.getElementById('regCard').style.display='none';document.getElementById('loginCard').style.display='block';document.getElementById('profileCard').style.display='none';document.getElementById('biddingSection').style.display='none';document.getElementById('walletLock').style.display='none';}
-function showRegister(){document.getElementById('regCard').style.display='block';document.getElementById('loginCard').style.display='none';document.getElementById('profileCard').style.display='none';document.getElementById('biddingSection').style.display='none';document.getElementById('walletLock').style.display='none';}
-function logout(){localStorage.removeItem('bid_current_user');location.reload();}
-function requestDepositForm(){document.getElementById('walletLock').style.display='block';window.scrollTo(0,0);}
-function requestDeposit(){let wa=localStorage.getItem('bid_current_user');let amt=parseFloat(document.getElementById('depAmount').value),pin=document.getElementById('depPin').value.trim(),ref=document.getElementById('depRef').value.trim();if(!amt||amt<50)return alert('Min R50 deposit required!');if(!pin||pin.length<8)return alert('Enter valid 1Voucher PIN - 16 digits');if(!ref)return alert('Enter reference name');let dep={id:Date.now(),whatsapp:wa,amount:amt,pin:pin,ref:ref,status:'pending',time:new Date().toLocaleString()};deposits.push(dep);save();document.getElementById('depMsg').innerHTML=`✅ Request sent! R${amt} - Admin will verify PIN ${pin.slice(-4)} and approve soon. Check WhatsApp`;document.getElementById('depPin').value='';renderPendingDepForUser();renderAdmin();alert(`✅ Deposit request R${amt} sent to admin! Wait for approval`);}
-function renderPendingDepForUser(){let wa=localStorage.getItem('bid_current_user');let my=deposits.filter(d=>d.whatsapp==wa);document.getElementById('pendingDepList').innerHTML=my.length?'<b>Your Deposit Requests:</b><br>'+my.map(d=>`R${d.amount} - ${d.status} - PIN ...${d.pin.slice(-4)} - ${d.time}`).join('<br>'):'No deposit requests yet';}
-function placeBid(name,price){let wa=localStorage.getItem('bid_current_user');if(!wa){alert('Register first');return;}if(wallet.balance<50)return alert(`🔒 ALCOHOL WALLET LOCKED! You have R${wallet.balance.toFixed(2)} - Need R50 min deposit via admin before bidding! Go to Wallet section`);if(wallet.balance<price)return alert(`❌ Need R${price} - You have R${wallet.balance.toFixed(2)} - Request more credit`);if(wallet.debt>0)return alert(`❌ Pay for ${wallet.debtBottle} first!`);wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`🔨 Bid R${price+10} on ${name}`});save();setTimeout(()=>{let win=Math.random()>0.4;if(win){wallet.debt=1;wallet.debtBottle=name;wallet.debtPrice=price+10;wallet.debtExpiry=Date.now()+24*3600000;wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`🏆 WON ${name} R${price+10} - Verify ID!`});save();document.getElementById('verifySection').style.display='block';document.getElementById('vBottle').innerText=name;document.getElementById('vPrice').innerText=price+10;alert(`🏆 YOU WON ${name} for R${price+10}! Verify ID now!`);}else{wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`❌ Outbid on ${name}`});save();alert('Outbid!');}},1200);}
-function checkAge(id){let el=document.getElementById('vAgeCheck');if(id.length>=6){let y=parseInt(id.substring(0,2));let fy=y<25?2000+y:1900+y;let age=new Date().getFullYear()-fy;el.innerHTML=age>=18?`✅ Age ${age} OK`:`❌ Age ${age} - Must 18+`;el.style.color=age>=18?'#0f0':'#f00';}}
-function submitVerification(){let wa=localStorage.getItem('bid_current_user');let id=document.getElementById('vID').value.trim(),addr=document.getElementById('vAddress').value.trim(),agree=document.getElementById('vAgree').checked;if(!id||!addr)return alert('Fill ID + Address');if(id.length!=13)return alert('ID 13 digits');if(!agree)return alert('Agree');verifs[wa+'_verified']=true;verifs[wa+'_data']={id,address:addr,time:new Date().toLocaleString()};save();document.getElementById('vMsg').innerHTML='✅ Verified! Pay now in wallet';setTimeout(()=>{document.getElementById('verifySection').style.display='none';},1000);}
-function cancelWin(){if(confirm('Cancel = 1 Strike!')){strikes.count++;wallet.debt=0;wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`❌ Cancelled win - Strike ${strikes.count}/3`});save();document.getElementById('verifySection').style.display='none';}}
-function payDebt(){if(!verifs[localStorage.getItem('bid_current_user')+'_verified'])return alert('Verify ID first!');if(wallet.balance<wallet.debtPrice)return alert('Need more balance');wallet.balance-=wallet.debtPrice;wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`✅ Paid R${wallet.debtPrice} for ${wallet.debtBottle}`});wallet.debt=0;wallet.debtBottle="";wallet.debtPrice=0;wallet.debtExpiry=0;save();renderWallet();alert('✅ Paid! Delivery booked');}
-// COMPANY
-function registerCompany(){let n=document.getElementById('cName').value.trim(),r=document.getElementById('cReg').value.trim(),l=document.getElementById('cLicense').value.trim(),o=document.getElementById('cOwner').value.trim(),wa=document.getElementById('cWA').value.trim(),a=document.getElementById('cAddress').value.trim(),p=document.getElementById('cPass').value.trim();if(!n||!r||!l||!o||!wa||!a||!p)return alert('Fill all');companies[wa]={name:n,reg:r,license:l,owner:o,whatsapp:wa,address:a,password:p,status:'pending',joined:new Date().toLocaleString()};save();document.getElementById('cMsg').innerHTML='✅ Submitted! Admin approval needed';}
-function loginCompany(){let wa=document.getElementById('cLogWA').value.trim(),p=document.getElementById('cLogPass').value;let c=companies[wa];if(!c)return alert('Not found');if(c.password!==p)return alert('Wrong pass');localStorage.setItem('bid_current_company',wa);showCompanyDash();}
-function showCompanyDash(){let wa=localStorage.getItem('bid_current_company');let c=companies[wa];if(!c)return;document.getElementById('compRegCard').style.display='none';document.getElementById('compLoginCard').style.display='none';document.getElementById('compDashboard').style.display='block';document.getElementById('compNameShow').innerText=c.name;document.getElementById('compStatus').innerHTML=c.status=='approved'?'<span style="color:#0f0">✅ APPROVED</span>':c.status=='rejected'?'<span style="color:#f00">❌ REJECTED</span>':'<span style="color:#ff0">⏳ PENDING</span>';document.getElementById('compLicenseShow').innerText=c.license;renderMyBottles();}
+// BUYER
+function buyerRegister(){let n=document.getElementById('bRegName').value.trim(),wa=document.getElementById('bRegWA').value.trim(),p=document.getElementById('bRegPass').value.trim();if(!n||!wa||!p)return alert('Fill all');localStorage.setItem('bid_user_'+wa,JSON.stringify({name:n,whatsapp:wa,password:p}));localStorage.setItem('bid_current_user',wa);document.getElementById('bRegMsg').innerHTML=`✅ Welcome ${n}`;setTimeout(()=>{showBuyerProfile();checkWalletLock();},800);}
+function buyerLogin(){let wa=document.getElementById('bLogWA').value.trim(),p=document.getElementById('bLogPass').value;let d=localStorage.getItem('bid_user_'+wa);if(!d)return document.getElementById('bLogMsg').innerText='❌ Not found';let u=JSON.parse(d);if(u.password!==p)return document.getElementById('bLogMsg').innerText='❌ Wrong pass';localStorage.setItem('bid_current_user',wa);showBuyerProfile();checkWalletLock();}
+function showBuyerProfile(){let wa=localStorage.getItem('bid_current_user');let u=JSON.parse(localStorage.getItem('bid_user_'+wa)||'{}');document.getElementById('buyerRegCard').style.display='none';document.getElementById('buyerLoginCard').style.display='none';document.getElementById('buyerProfileCard').style.display='block';document.getElementById('bProfName').innerText=u.name;document.getElementById('bProfWA').innerText=u.whatsapp;}
+function showBuyerLogin(){document.getElementById('buyerRegCard').style.display='none';document.getElementById('buyerLoginCard').style.display='block';}
+function showBuyerReg(){document.getElementById('buyerRegCard').style.display='block';document.getElementById('buyerLoginCard').style.display='none';}
+function buyerLogout(){localStorage.removeItem('bid_current_user');location.reload();}
+function requestDeposit(){
+let wa=localStorage.getItem('bid_current_user');
+let amt=parseFloat(document.getElementById('depAmount').value),pin=document.getElementById('depPin').value.trim(),ref=document.getElementById('depRef').value.trim();
+if(!amt||amt<50)return alert('Min R50');if(!pin||pin.length<8)return alert('Enter PIN');if(!ref)return alert('Enter ref');
+let dep={id:Date.now(),whatsapp:wa,amount:amt,pin:pin,ref:ref,status:'pending',time:new Date().toLocaleString()};
+deposits.push(dep);save();
+document.getElementById('depMsg').innerHTML=`✅ Request R${amt} sent!`;
+// WHATSAPP ALERT TO ADMIN
+let msg = `🚨 BID.CO.ZA DEPOSIT ALERT!\n\n💰 Buyer requests R${amt}\n👤 Name: ${ref}\n📱 WhatsApp: ${wa}\n🎟️ 1Voucher PIN: ${pin}\n⏰ Time: ${new Date().toLocaleString()}\n\n✅ Approve in Admin Panel: ${window.location.href}\n\nAdmin Panel Password: admin123`;
+sendWAAlert(msg);
+renderPendingDepForUser();
+}
+function renderPendingDepForUser(){let wa=localStorage.getItem('bid_current_user');let my=deposits.filter(d=>d.whatsapp==wa);document.getElementById('pendingDepList').innerHTML=my.length?'<b>Your Requests:</b><br>'+my.map(d=>`R${d.amount} - ${d.status} - ...${d.pin.slice(-4)}`).join('<br>'):'No requests';}
+function placeBid(name,price){
+let wa=localStorage.getItem('bid_current_user');
+if(!wa){alert('Register as buyer');return;}
+if(wallet.balance<50)return alert(`🔒 Need R50 deposit!`);
+if(wallet.balance<price)return alert(`Need R${price} have R${wallet.balance.toFixed(2)}`);
+if(wallet.debt>0)return alert(`Pay for ${wallet.debtBottle} first`);
+wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`🔨 Bid R${price+10} on ${name}`});save();
+setTimeout(()=>{
+if(Math.random()>0.4){
+wallet.debt=1;wallet.debtBottle=name;wallet.debtPrice=price+10;wallet.debtExpiry=Date.now()+24*3600000;
+wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`🏆 WON ${name} R${price+10}`});save();
+document.getElementById('verifySection').style.display='block';document.getElementById('vBottle').innerText=name;document.getElementById('vPrice').innerText=price+10;
+// WHATSAPP ALERT - WINNER
+let msg = `🏆 BID.CO.ZA WINNER ALERT!\n\nBuyer ${wa} WON ${name} for R${price+10}\n\nBuyer must verify ID + Address before paying!\nCheck Admin Panel for ID verification.\n\nTime: ${new Date().toLocaleString()}`;
+sendWAAlert(msg);
+alert(`🏆 WON ${name} for R${price+10}! Verify ID! Admin alerted via WhatsApp!`);
+}else{wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`❌ Outbid on ${name}`});save();alert('Outbid!');}
+},1200);
+}
+function checkAge(id){let el=document.getElementById('vAgeCheck');if(id.length>=6){let y=parseInt(id.substring(0,2));let fy=y<25?2000+y:1900+y;let age=new Date().getFullYear()-fy;el.innerHTML=age>=18?`✅ Age ${age} OK`:`❌ Age ${age} Must 18+`;el.style.color=age>=18?'#0f0':'#f00';}}
+function submitVerification(){let wa=localStorage.getItem('bid_current_user');let id=document.getElementById('vID').value.trim(),addr=document.getElementById('vAddress').value.trim(),agree=document.getElementById('vAgree').checked;if(!id||!addr)return alert('Fill ID+Address');if(id.length!=13)return alert('ID 13 digits');if(!agree)return alert('Agree');verifs[wa+'_verified']=true;verifs[wa+'_data']={id,address:addr,time:new Date().toLocaleString()};save();document.getElementById('vMsg').innerHTML='✅ Verified!';
+// WHATSAPP ALERT - ID VERIFIED
+let msg = `✅ BID.CO.ZA ID VERIFIED!\n\nBuyer ${wa} verified ID!\nID: ${id}\nAddress: ${addr}\nBottle: ${wallet.debtBottle} R${wallet.debtPrice}\n\nBuyer can now pay! Check Admin Panel.`;
+sendWAAlert(msg);
+setTimeout(()=>document.getElementById('verifySection').style.display='none',1000);
+}
+function cancelWin(){if(confirm('Cancel = Strike!')){strikes.count++;wallet.debt=0;wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`❌ Cancelled - Strike`});save();document.getElementById('verifySection').style.display='none';}}
+function payDebt(){if(!verifs[localStorage.getItem('bid_current_user')+'_verified'])return alert('Verify ID first');if(wallet.balance<wallet.debtPrice)return alert('Need more balance');wallet.balance-=wallet.debtPrice;wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`✅ Paid R${wallet.debtPrice} for ${wallet.debtBottle}`});wallet.debt=0;wallet.debtBottle="";wallet.debtPrice=0;wallet.debtExpiry=0;save();renderWallet();alert('✅ Paid!');}
+// SELLER
+function sellerRegister(){
+let n=document.getElementById('sRegName').value.trim(),r=document.getElementById('sRegNo').value.trim(),l=document.getElementById('sRegLicense').value.trim(),o=document.getElementById('sRegOwner').value.trim(),wa=document.getElementById('sRegWA').value.trim(),a=document.getElementById('sRegAddr').value.trim(),p=document.getElementById('sRegPass').value.trim();
+if(!n||!r||!l||!o||!wa||!a||!p)return alert('Fill all');
+companies[wa]={name:n,reg:r,license:l,owner:o,whatsapp:wa,address:a,password:p,status:'pending',joined:new Date().toLocaleString()};save();
+document.getElementById('sRegMsg').innerHTML='✅ Submitted! Admin will WhatsApp alert!';
+// WHATSAPP ALERT - NEW COMPANY
+let msg = `🏪 BID.CO.ZA NEW SELLER!\n\nCompany: ${n}\nReg: ${r}\nLicense: ${l}\nOwner: ${o}\nWhatsApp: ${wa}\nAddress: ${a}\n\nNeeds Admin Approval!\nAdmin: ${window.location.href}`;
+sendWAAlert(msg);
+}
+function sellerLogin(){let wa=document.getElementById('sLogWA').value.trim(),p=document.getElementById('sLogPass').value;let c=companies[wa];if(!c)return document.getElementById('sLogMsg').innerText='❌ Not found';if(c.password!==p)return document.getElementById('sLogMsg').innerText='❌ Wrong pass';localStorage.setItem('bid_current_company',wa);showSellerDash();}
+function showSellerDash(){let wa=localStorage.getItem('bid_current_company');let c=companies[wa];if(!c)return;document.getElementById('sellerRegCard').style.display='none';document.getElementById('sellerLoginCard').style.display='none';document.getElementById('sellerProfileCard').style.display='block';document.getElementById('sellerDash').style.display='block';document.getElementById('sProfName').innerText=c.name;document.getElementById('sProfStatus').innerHTML=c.status=='approved'?'<span style="color:#0f0">✅ APPROVED</span>':c.status=='rejected'?'<span style="color:#f00">❌ REJECTED</span>':'<span style="color:#ff0">⏳ PENDING</span>';document.getElementById('sProfLicense').innerText=c.license;renderMyBottles();}
+function showSellerLogin(){document.getElementById('sellerRegCard').style.display='none';document.getElementById('sellerLoginCard').style.display='block';}
+function showSellerReg(){document.getElementById('sellerRegCard').style.display='block';document.getElementById('sellerLoginCard').style.display='none';}
+function sellerLogout(){localStorage.removeItem('bid_current_company');location.reload();}
 function renderMyBottles(){let wa=localStorage.getItem('bid_current_company');let my=bottles.filter(b=>b.companyWA==wa);document.getElementById('myBottles').innerHTML=my.map(b=>`${b.name} R${b.price} - ${b.approved?'✅ LIVE':'⏳ Pending'}<br>`).join('')||'No bottles';}
-function postBottle(){let wa=localStorage.getItem('bid_current_company');let c=companies[wa];if(c.status!=='approved')return alert('Not approved yet');let n=document.getElementById('bName').value.trim(),pr=parseFloat(document.getElementById('bPrice').value),st=parseInt(document.getElementById('bStock').value);if(!n||!pr)return alert('Fill name+price');bottles.push({id:Date.now(),name:n,price:pr,stock:st||1,company:c.name,companyWA:wa,approved:false,live:false,ends:Date.now()+24*3600000,auth:"94"});save();document.getElementById('bMsg').innerText='✅ Submitted for admin approval';renderMyBottles();}
-function showCompReg(){document.getElementById('compRegCard').style.display='block';document.getElementById('compLoginCard').style.display='none';document.getElementById('compDashboard').style.display='none';}
-function showCompLogin(){document.getElementById('compRegCard').style.display='none';document.getElementById('compLoginCard').style.display='block';document.getElementById('compDashboard').style.display='none';}
-let curr=localStorage.getItem('bid_current_user');if(curr){showProfile();checkWalletLock();}let cCurr=localStorage.getItem('bid_current_company');if(cCurr)showCompanyDash();
-function adminLogin(){let p=document.getElementById('adminPass').value;if(p!=='admin123'&&p!=='bid2024')return alert('Wrong password - Try admin123');document.getElementById('adminContent').style.display='block';renderAdmin();}
-function renderAdmin(){let pd=document.getElementById('pendingDeposits');pd.innerHTML=deposits.length?deposits.map(d=>`<div style="background:#000;padding:10px;border-radius:8px;margin:6px 0;border:2px solid ${d.status=='pending'?'#ff0':'#0f0'}"><b>R${d.amount} - ${d.whatsapp}</b> - Ref: ${d.ref}<br><span class="small">1Voucher PIN: ${d.pin} - Time: ${d.time} - Status: ${d.status}</span><br>${d.status=='pending'?`<button class="btn" style="background:#0f0;padding:6px;width:48%;display:inline-block" onclick="approveDeposit(${d.id})">✅ Approve + Add R${d.amount} to Wallet</button> <button class="btn" style="background:#f00;color:#fff;padding:6px;width:48%;display:inline-block" onclick="rejectDeposit(${d.id})">❌ Reject PIN Invalid</button>`:''}</div>`).join(''):'No deposit requests';let pc=document.getElementById('pendingCompanies');pc.innerHTML=Object.values(companies).map(c=>`<div style="background:#000;padding:8px;border-radius:8px;margin:6px 0"><b>${c.name}</b> - ${c.license} - ${c.whatsapp} - ${c.status}<br>${c.status=='pending'?`<button class="btn" style="background:#0f0;padding:6px;width:48%;display:inline-block" onclick="approveCompany('${c.whatsapp}')">Approve</button> <button class="btn" style="background:#f00;color:#fff;padding:6px;width:48%;display:inline-block" onclick="rejectCompany('${c.whatsapp}')">Reject</button>`:''}</div>`).join('')||'No companies';let pb=document.getElementById('pendingBottles');pb.innerHTML=bottles.map(b=>`<div style="background:#000;padding:8px;border-radius:8px;margin:6px 0"><b>${b.name}</b> R${b.price} - ${b.company} - ${b.approved?'✅ LIVE':'⏳ Pending'}<br>${!b.approved?`<button class="btn" style="background:#0f0;padding:6px;width:48%;display:inline-block" onclick="approveBottle(${b.id})">Approve Live</button> <button class="btn" style="background:#f00;color:#fff;padding:6px;width:48%;display:inline-block" onclick="rejectBottle(${b.id})">Reject</button>`:''}</div>`).join('')||'No bottles';let pv=document.getElementById('pendingVerifs');pv.innerHTML=Object.keys(verifs).filter(k=>k.endsWith('_data')).map(k=>{let wa=k.replace('_data','');let d=verifs[k];return `<div style="background:#000;padding:8px;border-radius:8px;margin:6px 0"><b>${wa}</b> - ID ${d.id} - ${d.address}</div>`}).join('')||'No verifs';}
-function approveDeposit(id){let d=deposits.find(x=>x.id==id);if(!d)return;d.status='approved';let wa=d.whatsapp;let currentBal=JSON.parse(localStorage.getItem('bid_wallet')||'{"balance":0}').balance;wallet.balance+=d.amount;wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`✅ Admin Approved Deposit R${d.amount} - PIN ${d.pin.slice(-4)}`});save();renderAdmin();checkWalletLock();alert(`✅ Approved! R${d.amount} added to ${wa} wallet - Now they can bid!`);}
-function rejectDeposit(id){deposits=deposits.filter(x=>x.id!=id);save();renderAdmin();alert('❌ Deposit rejected - PIN invalid');}
+function postBottle(){
+let wa=localStorage.getItem('bid_current_company');let c=companies[wa];if(c.status!=='approved')return alert('Not approved yet');let n=document.getElementById('bName').value.trim(),pr=parseFloat(document.getElementById('bPrice').value),st=parseInt(document.getElementById('bStock').value);
+if(!n||!pr)return alert('Fill name+price');
+bottles.push({id:Date.now(),name:n,price:pr,stock:st||1,company:c.name,companyWA:wa,approved:false,live:false,ends:Date.now()+24*3600000,auth:"94"});save();
+document.getElementById('bMsg').innerText='✅ Submitted! Admin alerted via WhatsApp!';
+// WHATSAPP ALERT - NEW BOTTLE
+let msg = `🍾 BID.CO.ZA NEW BOTTLE!\n\nSeller: ${c.name} (${wa})\nBottle: ${n} R${pr} Stock ${st}\n\nNeeds Approval to go LIVE!\nAdmin: ${window.location.href}`;
+sendWAAlert(msg);
+renderMyBottles();
+}
+// ADMIN
+function adminLogin(){let p=document.getElementById('adminPass').value;if(p!=='admin123'&&p!=='bid2024')return alert('Wrong');document.getElementById('adminContent').style.display='block';renderAdmin();}
+function renderAdmin(){let pd=document.getElementById('pendingDeposits');pd.innerHTML=deposits.length?deposits.map(d=>`<div style="background:#000;padding:10px;border-radius:8px;margin:6px 0;border:2px solid ${d.status=='pending'?'#ff0':'#0f0'}"><b>R${d.amount} - ${d.whatsapp}</b> - ${d.ref}<br><span class="small">PIN: ${d.pin} - ${d.time} - ${d.status}</span><br>${d.status=='pending'?`<button class="btn" style="background:#0f0;padding:6px;width:48%;display:inline-block" onclick="approveDeposit(${d.id})">Approve</button> <button class="btn" style="background:#f00;color:#fff;padding:6px;width:48%;display:inline-block" onclick="rejectDeposit(${d.id})">Reject</button>`:''}</div>`).join(''):'No deposits';let pc=document.getElementById('pendingCompanies');pc.innerHTML=Object.values(companies).map(c=>`<div style="background:#000;padding:8px;border-radius:8px;margin:6px 0"><b>${c.name}</b> - ${c.license} - ${c.whatsapp} - ${c.status}<br>${c.status=='pending'?`<button class="btn" style="background:#0f0;padding:6px;width:48%;display:inline-block" onclick="approveCompany('${c.whatsapp}')">Approve</button> <button class="btn" style="background:#f00;color:#fff;padding:6px;width:48%;display:inline-block" onclick="rejectCompany('${c.whatsapp}')">Reject</button>`:''}</div>`).join('')||'No companies';let pb=document.getElementById('pendingBottles');pb.innerHTML=bottles.map(b=>`<div style="background:#000;padding:8px;border-radius:8px;margin:6px 0"><b>${b.name}</b> R${b.price} - ${b.company} - ${b.approved?'✅ LIVE':'⏳ Pending'}<br>${!b.approved?`<button class="btn" style="background:#0f0;padding:6px;width:48%;display:inline-block" onclick="approveBottle(${b.id})">Approve LIVE</button> <button class="btn" style="background:#f00;color:#fff;padding:6px;width:48%;display:inline-block" onclick="rejectBottle(${b.id})">Reject</button>`:''}</div>`).join('')||'No bottles';let pv=document.getElementById('pendingVerifs');pv.innerHTML=Object.keys(verifs).filter(k=>k.endsWith('_data')).map(k=>{let wa=k.replace('_data','');let d=verifs[k];return `<div style="background:#000;padding:8px;border-radius:8px;margin:6px 0"><b>${wa}</b> - ID ${d.id} - ${d.address}</div>`}).join('')||'No verifs';document.getElementById('adminStats').innerHTML=`Buyers: ${Object.keys(localStorage).filter(k=>k.startsWith('bid_user_')).length}<br>Companies: ${Object.keys(companies).length}<br>Bottles: ${bottles.length}<br>Deposits: ${deposits.length} - Pending ${deposits.filter(d=>d.status=='pending').length}`;}
+function approveDeposit(id){let d=deposits.find(x=>x.id==id);if(!d)return;d.status='approved';wallet.balance+=d.amount;wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`✅ Admin Approved R${d.amount}`});save();renderAdmin();alert(`✅ Approved R${d.amount} for ${d.whatsapp}`);}
+function rejectDeposit(id){deposits=deposits.filter(x=>x.id!=id);save();renderAdmin();}
 function approveCompany(wa){companies[wa].status='approved';save();renderAdmin();}
 function rejectCompany(wa){companies[wa].status='rejected';save();renderAdmin();}
-function approveBottle(id){let b=bottles.find(x=>x.id==id);if(b){b.approved=true;b.live=true;b.ends=Date.now()+24*3600000;save();renderAdmin();renderLive();}}
+function approveBottle(id){let b=bottles.find(x=>x.id==id);if(b){b.approved=true;b.live=true;b.ends=Date.now()+24*3600000;save();renderAdmin();}}
 function rejectBottle(id){bottles=bottles.filter(x=>x.id!=id);save();renderAdmin();}
 </script>
 </body>
