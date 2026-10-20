@@ -2,215 +2,272 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BID.CO.ZA - WhatsApp Alerts</title>
+<title>PHUZA AUCTION - Durban Flash Alcohol Auctions</title>
 <style>
-body{background:#0a0a0a;color:#fff;font-family:Arial;margin:0;padding:0 14px 100px}
-.header{background:#000;padding:14px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #f5c518;position:sticky;top:0;z-index:20}
-.logo{color:#f5c518;font-weight:900;font-size:18px;display:flex;gap:8px;align-items:center}
+body{background:#0a0a0a;color:#fff;font-family:Arial;margin:0;padding:0 14px 120px}
+.header{background:linear-gradient(90deg,#000,#1a0000);padding:14px;display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #ff6b00;position:sticky;top:0;z-index:20}
+.logo{color:#ff6b00;font-weight:900;font-size:20px;display:flex;gap:8px;align-items:center;letter-spacing:1px}
+.logo span{color:#fff}
 .card{background:#151515;border-radius:14px;padding:14px;margin:12px 0;border:1px solid #2a2a2a}
-.btn{background:#f5c518;color:#000;border:0;padding:14px;border-radius:10px;font-weight:900;width:100%;cursor:pointer;margin-top:8px}
+.btn{background:#ff6b00;color:#fff;border:0;padding:14px;border-radius:10px;font-weight:900;width:100%;cursor:pointer;margin-top:8px}
 .btn2{background:#222;color:#fff;border:1px solid #444;padding:12px;border-radius:10px;font-weight:700;width:100%;cursor:pointer;margin-top:8px}
+.flash{border:2px solid #f00 !important;background:linear-gradient(135deg,#2a0000,#151515) !important;animation:flashBorder 1s infinite}
+.extended{border:2px solid #0f0 !important;background:linear-gradient(135deg,#002a00,#151515) !important;animation:extendPulse 0.5s 3}
+@keyframes flashBorder{0%,100%{border-color:#f00}50%{border-color:#ff0}}
+@keyframes extendPulse{0%,100%{border-color:#0f0;transform:scale(1)}50%{border-color:#ff0;transform:scale(1.02)}}
 .portal{border-radius:16px;padding:20px;margin:12px 0;text-align:center;cursor:pointer}
-.portalBuyer{background:linear-gradient(135deg,#151515,#1a1a00);border:3px solid #f5c518}
-.portalSeller{background:linear-gradient(135deg,#151515,#001a1a);border:3px solid #00ffff}
+.portalBuyer{border:3px solid #ff6b00;background:linear-gradient(135deg,#151515,#2a1500)}
+.portalSeller{border:3px solid #00ffff;background:linear-gradient(135deg,#151515,#001a1a)}
 .portalAdmin{background:#111;border:1px dashed #444}
-input{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#000;color:#fff;margin:6px 0;box-sizing:border-box}
+input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#000;color:#fff;margin:6px 0;box-sizing:border-box}
+textarea{min-height:60px}
 .small{font-size:12px;color:#999}
 #buyerArea,#sellerArea,#adminArea,#verifySection,#walletLock{display:none}
+.bottle-img{width:100%;height:180px;object-fit:cover;border-radius:10px;background:#000;border:1px solid #333}
+.badge{background:#222;padding:4px 8px;border-radius:12px;font-size:11px}
+.badge-flash{background:#f00;color:#fff;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:900;animation:blink 0.5s infinite}
+.badge-extend{background:#0f0;color:#000;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:900;animation:blink 0.3s infinite}
 .live-dot{width:8px;height:8px;background:#0f0;border-radius:50%;display:inline-block;animation:blink 1s infinite}@keyframes blink{50%{opacity:0}}
-.locked{background:#300;border:2px solid #f00;padding:12px;border-radius:10px;text-align:center;margin:10px 0}
-.wa-alert{background:#25D366;color:#fff;padding:8px;border-radius:8px;font-size:12px;text-align:center;margin:8px 0}
+.locked{background:#300;border:2px solid #f00;padding:12px;border-radius:10px;text-align:center}
+.preview-box{background:#000;border:2px dashed #555;border-radius:10px;padding:10px;text-align:center;margin:8px 0}
+.preview-box img{max-width:100%;max-height:200px;border-radius:8px}
+.countdown-flash{color:#f00;font-weight:900;font-size:16px;animation:blink 0.5s infinite}
+.countdown-extend{color:#0f0;font-weight:900;font-size:16px;animation:blink 0.3s infinite}
 </style>
 </head>
 <body>
-<div class="header"><div class="logo">🥃 BID.CO.ZA</div><div style="font-size:11px">R<span id="hBal">0</span> • WhatsApp Alerts ON ✅</div></div>
+<div class="header"><div class="logo">🍻 PHUZA <span>AUCTION</span></div><div style="font-size:11px">R<span id="hBal">0</span> • Durban</div></div>
 
 <div id="landing">
-<h2 style="text-align:center;color:#f5c518">BID.CO.ZA - Choose Portal</h2>
+<h1 style="text-align:center;color:#ff6b00;margin:10px 0">🍻 PHUZA AUCTION 🍻</h1>
+<p style="text-align:center;color:#fff;font-weight:900">Durban's #1 Flash Alcohol Auction</p>
+<p class="small" style="text-align:center">⚡ Flash 2min-30min | ⏰ Auto-Extend Anti-Snipe | 📸 Photo + Duration</p>
 
 <div class="portal portalBuyer" onclick="openPortal('buyer')">
-<div style="font-size:50px">🛒</div><h2 style="color:#f5c518">BUYER PORTAL</h2>
-<p class="small">WhatsApp + Name only → R50 Deposit → Bid</p>
-<button class="btn">Enter Buyer →</button>
+<div style="font-size:50px">🛒🍻</div><h2 style="color:#ff6b00">BUYER PORTAL</h2><p>Phuza Buyers - Bid Fast!</p><p class="small">WhatsApp + Name → R50 Deposit → Bid → Verify ID after win</p><button class="btn">Enter Phuza Buyer →</button>
 </div>
 
 <div class="portal portalSeller" onclick="openPortal('seller')">
-<div style="font-size:50px">🏪</div><h2 style="color:#00ffff">SELLER PORTAL</h2>
-<p class="small">Company + License → Admin Approval → Post bottles</p>
-<button class="btn" style="background:#00ffff;color:#000">Enter Seller →</button>
+<div style="font-size:50px">🏪🍾</div><h2 style="color:#00ffff">SELLER PORTAL</h2><p>Phuza Sellers - Sell Fast!</p><p class="small">Company + License → Post with Photo + Flash Duration + Auto-Extend</p><button class="btn" style="background:#00ffff;color:#000">Enter Phuza Seller →</button>
 </div>
 
 <div class="portal portalAdmin" onclick="openPortal('admin')">
-<h3>🔐 ADMIN - WhatsApp Alerts</h3><p class="small">Admin gets WhatsApp for every deposit, company, win</p><button class="btn2">Admin Login</button>
+<h3>🔐 PHUZA ADMIN</h3><p class="small">Approve Deposits, Companies, Flash Bottles</p><button class="btn2">Admin Login</button>
 </div>
+
+<div style="text-align:center;margin-top:15px"><p class="small">📍 Durban, KZN • 18+ Only • Liquor License Required<br>Phuza Responsibly • WhatsApp: 0789313670</p></div>
 </div>
 
 <!-- BUYER AREA -->
 <div id="buyerArea">
-<button class="btn2" onclick="goHome()" style="width:auto">← Back</button>
-<h2 style="color:#f5c518">🛒 BUYER PORTAL</h2>
+<button class="btn2" onclick="goHome()" style="width:auto">← Back to Phuza Home</button>
+<h2 style="color:#ff6b00">🛒 PHUZA BUYER PORTAL</h2>
 <div id="buyerAuth">
-<div class="card" id="buyerRegCard" style="border:2px solid #f5c518"><h3>Buyer Register</h3><input id="bRegName" placeholder="Full Name *"><input id="bRegWA" placeholder="WhatsApp 082... *"><input id="bRegPass" type="password" placeholder="Password *"><button class="btn" onclick="buyerRegister()">Register as Buyer</button><p class="small" style="text-align:center"><a href="#" onclick="showBuyerLogin()" style="color:#f5c518">Login</a></p><p id="bRegMsg" class="small"></p></div>
-<div class="card" id="buyerLoginCard" style="display:none;border:2px solid #f5c518"><h3>Buyer Login</h3><input id="bLogWA" placeholder="WhatsApp"><input id="bLogPass" type="password" placeholder="Password"><button class="btn" onclick="buyerLogin()">Login</button><p class="small" style="text-align:center"><a href="#" onclick="showBuyerReg()" style="color:#f5c518">Register</a></p><p id="bLogMsg" class="small"></p></div>
-<div class="card" id="buyerProfileCard" style="display:none;border:1px solid #0f0"><b>🛒 <span id="bProfName"></span></b> • <span id="bProfWA"></span> • <a href="#" onclick="buyerLogout()" style="color:#999">Logout</a></div>
+<div class="card" id="buyerRegCard" style="border:2px solid #ff6b00"><h3>Phuza Buyer Register - 10 Sec</h3><p class="small">Only WhatsApp + Name to start phuza bidding!</p><input id="bRegName" placeholder="Full Name *"><input id="bRegWA" placeholder="WhatsApp 082... *"><input id="bRegPass" type="password" placeholder="Password *"><button class="btn" onclick="buyerRegister()">Join Phuza Auction</button><p class="small" style="text-align:center"><a href="#" onclick="showBuyerLogin()" style="color:#ff6b00">Already Phuza Buyer? Login</a></p><p id="bRegMsg" class="small"></p></div>
+<div class="card" id="buyerLoginCard" style="display:none;border:2px solid #ff6b00"><h3>Phuza Buyer Login</h3><input id="bLogWA" placeholder="WhatsApp"><input id="bLogPass" type="password" placeholder="Password"><button class="btn" onclick="buyerLogin()">Login to Phuza</button><p class="small" style="text-align:center"><a href="#" onclick="showBuyerReg()" style="color:#ff6b00">New? Join Phuza</a></p><p id="bLogMsg" class="small"></p></div>
+<div class="card" id="buyerProfileCard" style="display:none;border:1px solid #0f0"><b>🍻 Phuza Buyer: <span id="bProfName"></span></b> • <span id="bProfWA"></span> • <a href="#" onclick="buyerLogout()" style="color:#999">Logout</a></div>
 </div>
-
-<div id="walletLock" class="locked">
-<h3 style="color:#ff6b6b">🔒 R50 DEPOSIT REQUIRED</h3>
-<p>Balance R<span id="lockBal">0.00</span> - Need R50 min to bid</p>
-<div style="background:#000;padding:12px;border-radius:10px;text-align:left">
-<p class="small">Buy 1Voucher R50 at Shoprite → Enter PIN → Admin gets WhatsApp alert & approves</p>
-<input id="depAmount" type="number" value="50"><input id="depPin" placeholder="1Voucher PIN 16 digits *"><input id="depRef" placeholder="Your Name *">
-<button class="btn" style="background:#0f0;color:#000" onclick="requestDeposit()">📤 Request + WhatsApp Admin</button><p id="depMsg" class="small"></p>
-<div id="waPreview" class="wa-alert" style="display:none"></div>
-</div>
-<div id="pendingDepList" class="small" style="background:#000;padding:8px;border-radius:8px;margin-top:8px"></div>
-</div>
-
-<div id="verifySection" class="card" style="border:3px solid #f00;background:#200"><h3 style="color:#ff6b6b">🚨 WINNER - Verify ID!</h3><p>Won <b id="vBottle"></b> for R<b id="vPrice"></b></p><input id="vID" placeholder="SA ID 13 digits *" maxlength="13" oninput="checkAge(this.value)"><span id="vAgeCheck" class="small"></span><input id="vAddress" placeholder="Delivery Address *"><div style="display:flex;gap:8px;margin-top:8px"><input type="checkbox" id="vAgree" style="width:auto"><span class="small">I am 18+ *</span></div><button class="btn" style="background:#0f0" onclick="submitVerification()">✅ Verify & Pay</button><button class="btn2" onclick="cancelWin()">❌ Cancel</button><p id="vMsg" class="small"></p></div>
-
-<div id="buyerBidding">
-<div class="card" style="border:2px solid #f5c518"><h3>💳 Wallet - R50 Protected</h3><div style="background:#000;padding:12px;border-radius:12px;text-align:center">R<b id="balance" style="font-size:26px;color:#f5c518">0.00</b><div id="debtBox" style="display:none;background:#300;padding:10px;border-radius:8px;margin-top:8px;border:1px solid #f00">Pay R<span id="debt"></span> for <span id="debtBottle"></span><br>⏰ <b id="timer">23:59:59</b><br><button class="btn" style="background:#0f0;padding:8px" onclick="payDebt()">Pay</button></div><div class="small">Strikes <span id="strikeInfo">0/3</span> • <span id="verifiedStatus">❌</span></div></div><button class="btn2" onclick="document.getElementById('walletLock').style.display='block'">+ Request Credit</button><div id="txList" class="small" style="background:#000;padding:8px;border-radius:8px;margin-top:8px;max-height:100px;overflow:auto"></div></div>
-<h3>🔥 Live Auctions</h3><div id="liveList"></div>
-</div>
+<div id="walletLock" class="locked"><h3 style="color:#ff6b6b">🔒 PHUZA WALLET - R50 DEPOSIT REQUIRED</h3><p>Balance R<span id="lockBal">0.00</span> - Need R50 min to phuza!</p><div style="background:#000;padding:12px;border-radius:10px;text-align:left"><p class="small">Buy 1Voucher R50 at Shoprite/Boxer → Enter PIN → Admin gets WhatsApp & approves</p><input id="depAmount" type="number" value="50"><input id="depPin" placeholder="1Voucher PIN 16 digits *"><input id="depRef" placeholder="Your Name *"><button class="btn" style="background:#0f0;color:#000" onclick="requestDeposit()">📤 Request Phuza Credit + WhatsApp Admin</button><p id="depMsg" class="small"></p></div><div id="pendingDepList" class="small" style="background:#000;padding:8px;border-radius:8px;margin-top:8px"></div></div>
+<div id="verifySection" class="card" style="border:3px solid #f00;background:#200"><h3 style="color:#ff6b6b">🚨 PHUZA WINNER - Verify ID!</h3><p>Won <b id="vBottle"></b> for R<b id="vPrice"></b></p><p class="small">SA Liquor Act: Verify before delivery - 18+ FICA</p><input id="vID" placeholder="SA ID 13 digits *" maxlength="13" oninput="checkAge(this.value)"><span id="vAgeCheck" class="small"></span><input id="vAddress" placeholder="Delivery Address *"><div style="display:flex;gap:8px;margin-top:8px"><input type="checkbox" id="vAgree" style="width:auto"><span class="small">I am 18+ & details true *</span></div><button class="btn" style="background:#0f0" onclick="submitVerification()">✅ Verify & Pay for Phuza</button><button class="btn2" onclick="cancelWin()">❌ Cancel (Strike)</button><p id="vMsg" class="small"></p></div>
+<div id="buyerBidding"><div class="card" style="border:2px solid #ff6b00"><h3>💳 Phuza Wallet - R50 Protected</h3><div style="background:#000;padding:12px;border-radius:12px;text-align:center">R<b id="balance" style="font-size:26px;color:#ff6b00">0.00</b><div id="debtBox" style="display:none;background:#300;padding:10px;border-radius:8px;margin-top:8px;border:1px solid #f00">Pay R<span id="debt"></span> for <span id="debtBottle"></span><br>⏰ <b id="timer">23:59:59</b><br><button class="btn" style="background:#0f0;padding:8px" onclick="payDebt()">Pay for Phuza</button></div><div class="small">Strikes <span id="strikeInfo">0/3</span> • <span id="verifiedStatus">❌</span> • Auto-Extend ON ✅</div></div><div id="txList" class="small" style="background:#000;padding:8px;border-radius:8px;margin-top:8px;max-height:100px;overflow:auto"></div></div><h3>⚡ Phuza Flash & Live Auctions 🍻</h3><div id="liveList"></div></div>
 </div>
 
 <!-- SELLER AREA -->
 <div id="sellerArea">
-<button class="btn2" onclick="goHome()" style="width:auto">← Back</button>
-<h2 style="color:#00ffff">🏪 SELLER PORTAL</h2>
+<button class="btn2" onclick="goHome()" style="width:auto">← Back to Phuza Home</button>
+<h2 style="color:#00ffff">🏪 PHUZA SELLER PORTAL</h2>
 <div id="sellerAuth">
-<div class="card" id="sellerRegCard" style="border:2px solid #00ffff"><h3>Company Register</h3><input id="sRegName" placeholder="Company Name *"><input id="sRegNo" placeholder="Reg No *"><input id="sRegLicense" placeholder="Liquor License *"><input id="sRegOwner" placeholder="Owner Name *"><input id="sRegWA" placeholder="Company WhatsApp *"><input id="sRegAddr" placeholder="Shop Address *"><input id="sRegPass" type="password" placeholder="Password *"><button class="btn" style="background:#00ffff;color:#000" onclick="sellerRegister()">Submit + WhatsApp Admin</button><p id="sRegMsg" class="small"></p><p class="small" style="text-align:center"><a href="#" onclick="showSellerLogin()" style="color:#00ffff">Login</a></p></div>
-<div class="card" id="sellerLoginCard" style="display:none"><h3>Seller Login</h3><input id="sLogWA" placeholder="Company WhatsApp"><input id="sLogPass" type="password" placeholder="Password"><button class="btn" style="background:#00ffff;color:#000" onclick="sellerLogin()">Login</button><p class="small" style="text-align:center"><a href="#" onclick="showSellerReg()" style="color:#00ffff">Register Company</a></p><p id="sLogMsg" class="small"></p></div>
-<div class="card" id="sellerProfileCard" style="display:none;border:1px solid #00ffff"><b>🏪 <span id="sProfName"></span></b> - <span id="sProfStatus"></span><br><span class="small" id="sProfLicense"></span> • <a href="#" onclick="sellerLogout()" style="color:#999">Logout</a></div>
+<div class="card" id="sellerRegCard" style="border:2px solid #00ffff"><h3>Phuza Seller - Company Register</h3><p class="small">Need Liquor License - Admin approval</p><input id="sRegName" placeholder="Company Name - e.g. Sipho's Cellar *"><input id="sRegNo" placeholder="Reg No *"><input id="sRegLicense" placeholder="Liquor License *"><input id="sRegOwner" placeholder="Owner Name *"><input id="sRegWA" placeholder="Company WhatsApp *"><input id="sRegAddr" placeholder="Shop Address *"><input id="sRegPass" type="password" placeholder="Password *"><button class="btn" style="background:#00ffff;color:#000" onclick="sellerRegister()">Join Phuza Sellers + WhatsApp Admin</button><p id="sRegMsg" class="small"></p><p class="small" style="text-align:center"><a href="#" onclick="showSellerLogin()" style="color:#00ffff">Have seller account? Login</a></p></div>
+<div class="card" id="sellerLoginCard" style="display:none"><h3>Phuza Seller Login</h3><input id="sLogWA" placeholder="Company WhatsApp"><input id="sLogPass" type="password" placeholder="Password"><button class="btn" style="background:#00ffff;color:#000" onclick="sellerLogin()">Login as Phuza Seller</button><p class="small" style="text-align:center"><a href="#" onclick="showSellerReg()" style="color:#00ffff">New? Register Company</a></p><p id="sLogMsg" class="small"></p></div>
+<div class="card" id="sellerProfileCard" style="display:none;border:1px solid #00ffff"><b>🏪 Phuza Seller: <span id="sProfName"></span></b> - <span id="sProfStatus"></span><br><span class="small" id="sProfLicense"></span> • <a href="#" onclick="sellerLogout()" style="color:#999">Logout</a></div>
 </div>
-<div id="sellerDash" style="display:none"><div class="card"><h3>➕ Post Bottle</h3><input id="bName" placeholder="Bottle Name *"><input id="bPrice" type="number" placeholder="Price R *"><input id="bStock" type="number" placeholder="Stock *"><button class="btn" style="background:#00ffff;color:#000" onclick="postBottle()">Submit for Admin Approval + WhatsApp Alert</button><p id="bMsg" class="small"></p></div><div class="card"><h3>📦 My Bottles</h3><div id="myBottles" class="small"></div></div></div>
+<div id="sellerDash" style="display:none">
+<div class="card" style="border:2px solid #00ffff;background:#001a1a">
+<h3>➕ Post Phuza Bottle - Flash + Auto-Extend</h3>
+<input id="bName" placeholder="Alcohol Name - e.g. Jameson 750ml *"><div style="display:flex;gap:8px"><input id="bPrice" type="number" placeholder="Start Price R *" style="flex:1"><input id="bStock" type="number" placeholder="Stock *" style="flex:1"></div>
+<select id="bCategory"><option value="Whiskey">🥃 Whiskey</option><option value="Brandy">🍷 Brandy</option><option value="Gin">🍸 Gin</option><option value="Vodka">🍶 Vodka</option><option value="Beer">🍺 Beer / Ciders</option><option value="Wine">🍷 Wine</option><option value="Champagne">🍾 Champagne</option><option value="Other">Other</option></select>
+<textarea id="bDesc" placeholder="Description - e.g. Sealed, imported, best before 2026 *"></textarea><input id="bLocation" placeholder="Location - e.g. Durban North *">
+<label style="color:#00ffff;font-size:12px;font-weight:900">📸 Upload Bottle Photo *</label><input id="bPhoto" type="file" accept="image/*" onchange="previewPhoto(this)"><div id="photoPreview" class="preview-box" style="display:none"><img id="previewImg"><p class="small" id="photoName"></p><button class="btn2" style="padding:6px;font-size:11px" onclick="clearPhoto()">❌ Remove</button></div>
+<div style="background:#000;padding:10px;border-radius:10px;border:2px solid #f00;margin:10px 0">
+<label style="color:#f00;font-size:13px;font-weight:900">⚡ Phuza Flash Duration + ⏰ Auto-Extend *</label>
+<select id="bDuration" style="border:2px solid #f00;font-weight:900">
+<optgroup label="⚡ FLASH - MINUTES (Phuza Quick Sales!)">
+<option value="2">⚡ 2 Mins Super Flash - Extends +2m if last 60s</option>
+<option value="5">⚡ 5 Mins Flash - Extends +2m if last 60s</option>
+<option value="10">⚡ 10 Mins Quick Flash - Extends +2m if last 60s</option>
+<option value="15">⚡ 15 Mins Flash - Extends +2m if last 60s</option>
+<option value="30">⚡ 30 Mins Half Hour Flash - Extends +2m</option>
+</optgroup>
+<optgroup label="🕐 NORMAL - HOURS/DAYS">
+<option value="60">1 Hour - Extends +5m if last 5m</option>
+<option value="360">6 Hours - Extends +5m</option>
+<option value="720">12 Hours</option>
+<option value="1440" selected>24 Hours - 1 Day (Recommended)</option>
+<option value="4320">3 Days Weekend</option>
+<option value="10080">7 Days</option>
+</optgroup>
+</select>
+<p class="small" style="color:#0f0">✅ Auto-Extend = No sniping! If bid last second, extends! Fair!</p>
+</div>
+<select id="bAuth"><option value="94">AI 94% Authentic</option><option value="99">99% With Receipt</option><option value="80">80% No receipt</option></select>
+<button class="btn" style="background:#00ffff;color:#000" onclick="postBottle()">📤 Post Phuza Bottle + WhatsApp Admin</button><p id="bMsg" class="small"></p>
+</div>
+<div class="card"><h3>📦 My Phuza Bottles</h3><div id="myBottles"></div></div>
+</div>
 </div>
 
-<!-- ADMIN AREA -->
+<!-- ADMIN -->
 <div id="adminArea">
-<button class="btn2" onclick="goHome()" style="width:auto">← Back</button>
-<h2 style="color:#ff6b6b">🔐 ADMIN - WhatsApp Alerts</h2>
-<div class="card" style="border:2px solid #f00"><h3>Admin Login</h3><input id="adminPass" type="password" placeholder="admin123"><button class="btn" style="background:#f00;color:#fff" onclick="adminLogin()">Unlock</button><p class="small">Admin WhatsApp: <b id="adminWADisplay"></b> - Change in code</p></div>
+<button class="btn2" onclick="goHome()" style="width:auto">← Back to Phuza Home</button>
+<h2 style="color:#ff6b6b">🔐 PHUZA ADMIN PANEL</h2>
+<div class="card" style="border:2px solid #f00"><h3>Admin Login - Phuza</h3><input id="adminPass" type="password" placeholder="Password: phuza123 or admin123"><button class="btn" style="background:#f00;color:#fff" onclick="adminLogin()">Unlock Phuza Admin</button><p class="small">Phuza Admin WhatsApp: 0789313670</p></div>
 <div id="adminContent" style="display:none">
-<div class="card" style="border:2px solid #0f0"><h3>💰 1. Deposits - WhatsApp Alerted</h3><div id="pendingDeposits"></div></div>
-<div class="card" style="border:2px solid #00ffff"><h3>🏪 2. Companies</h3><div id="pendingCompanies"></div></div>
-<div class="card" style="border:2px solid #f5c518"><h3>🍾 3. Bottles</h3><div id="pendingBottles"></div></div>
-<div class="card"><h3>👥 4. ID Verifications</h3><div id="pendingVerifs"></div></div>
-<div class="card"><h3>📊 Stats</h3><div id="adminStats" class="small"></div></div>
+<div class="card" style="border:2px solid #0f0"><h3>💰 1. Phuza Deposits - R50 Wallet</h3><div id="pendingDeposits"></div></div>
+<div class="card" style="border:2px solid #00ffff"><h3>🏪 2. Phuza Sellers - Companies</h3><div id="pendingCompanies"></div></div>
+<div class="card" style="border:2px solid #ff6b00"><h3>🍾 3. Phuza Bottles - Flash + Extends</h3><div id="pendingBottles"></div></div>
+<div class="card"><h3>👥 4. Phuza Buyers - ID Verifications</h3><div id="pendingVerifs"></div></div>
+<div class="card"><h3>📊 Phuza Stats</h3><div id="adminStats" class="small"></div></div>
 </div>
 </div>
 
 <script>
-// ===== CONFIG - CHANGE ADMIN WHATSAPP HERE =====
-const ADMIN_WA = "27789313670"; // Your number - 27 not 0
-document.getElementById('adminWADisplay').innerText = ADMIN_WA;
-
-let wallet=JSON.parse(localStorage.getItem('bid_wallet')||'{"balance":0,"debt":0,"debtBottle":"","debtPrice":0,"debtExpiry":0,"tx":[]}');
-let strikes=JSON.parse(localStorage.getItem('bid_strikes')||'{"count":0,"fine":0}');
-let companies=JSON.parse(localStorage.getItem('bid_companies')||'{}');
-let bottles=JSON.parse(localStorage.getItem('bid_bottles')||'[]');
-let verifs=JSON.parse(localStorage.getItem('bid_verifs')||'{}');
-let deposits=JSON.parse(localStorage.getItem('bid_deposits')||'[]');
-if(bottles.length==0){bottles=[{id:1,name:"Jameson 750ml",price:350,company:"Sipho's Cellar",companyWA:"27820000001",auth:"94",approved:true,live:true,ends:Date.now()+2*3600000,stock:12},{id:2,name:"Bells 1L",price:790,company:"Durban Liquor Hub",companyWA:"27820000002",auth:"Good Deal",approved:true,live:true,ends:Date.now()+45*60*1000,stock:6}];}
-function save(){localStorage.setItem('bid_wallet',JSON.stringify(wallet));localStorage.setItem('bid_strikes',JSON.stringify(strikes));localStorage.setItem('bid_companies',JSON.stringify(companies));localStorage.setItem('bid_bottles',JSON.stringify(bottles));localStorage.setItem('bid_verifs',JSON.stringify(verifs));localStorage.setItem('bid_deposits',JSON.stringify(deposits));}
-
-// WhatsApp alert function
-function sendWAAlert(message){
-let url = `https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(message)}`;
-window.open(url, '_blank');
-let preview = document.getElementById('waPreview');
-if(preview){preview.style.display='block';preview.innerHTML=`📱 WhatsApp alert sent to admin ${ADMIN_WA}:<br><i>${message.slice(0,100)}...</i>`;}
+const ADMIN_WA = "27789313670";
+let wallet=JSON.parse(localStorage.getItem('phuza_wallet')||'{"balance":0,"debt":0,"debtBottle":"","debtPrice":0,"debtExpiry":0,"tx":[]}');
+let strikes=JSON.parse(localStorage.getItem('phuza_strikes')||'{"count":0,"fine":0}');
+let companies=JSON.parse(localStorage.getItem('phuza_companies')||'{}');
+let bottles=JSON.parse(localStorage.getItem('phuza_bottles')||'[]');
+let verifs=JSON.parse(localStorage.getItem('phuza_verifs')||'{}');
+let deposits=JSON.parse(localStorage.getItem('phuza_deposits')||'[]');
+let tempPhotoBase64 = null;
+if(bottles.length==0){
+let img="https://images.unsplash.com/photo-1527281400683-1aae777175f8?w=400";
+bottles=[
+{id:1,name:"⚡ FLASH - Jameson 750ml - Phuza Special",price:350,company:"Sipho's Cellar - Durban North",companyWA:"27820000001",auth:"94",approved:true,live:true,ends:Date.now()+5*60*1000,stock:12,category:"Whiskey",desc:"Phuza Flash 5m + Auto-Extend 2m - Sealed imported!",location:"Durban North",photo:img,duration:5,isFlash:true,extends:0,originalEnds:Date.now()+5*60*1000},
+{id:2,name:"Bells 1L - Phuza 24h Auction",price:790,company:"Durban Liquor Hub - Berea",companyWA:"27820000002",auth:"99",approved:true,live:true,ends:Date.now()+45*60*1000,stock:6,category:"Whiskey",desc:"Phuza 24h + Extend 5m - With receipt",location:"Berea, Durban",photo:img,duration:1440,isFlash:false,extends:0,originalEnds:Date.now()+45*60*1000}
+];
 }
-
+function save(){localStorage.setItem('phuza_wallet',JSON.stringify(wallet));localStorage.setItem('phuza_strikes',JSON.stringify(strikes));localStorage.setItem('phuza_companies',JSON.stringify(companies));localStorage.setItem('phuza_bottles',JSON.stringify(bottles));localStorage.setItem('phuza_verifs',JSON.stringify(verifs));localStorage.setItem('phuza_deposits',JSON.stringify(deposits));}
+function sendWAAlert(m){let u=`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(m)}`;window.open(u,'_blank');}
 function goHome(){['buyerArea','sellerArea','adminArea'].forEach(id=>document.getElementById(id).style.display='none');document.getElementById('landing').style.display='block';}
-function openPortal(p){document.getElementById('landing').style.display='none';if(p=='buyer'){document.getElementById('buyerArea').style.display='block';let wa=localStorage.getItem('bid_current_user');if(wa){showBuyerProfile();checkWalletLock();}}else if(p=='seller'){document.getElementById('sellerArea').style.display='block';let wa=localStorage.getItem('bid_current_company');if(wa)showSellerDash();}else if(p=='admin'){document.getElementById('adminArea').style.display='block';}}
-function checkWalletLock(){let wa=localStorage.getItem('bid_current_user');if(!wa)return;let bal=wallet.balance;document.getElementById('lockBal').innerText=bal.toFixed(2);document.getElementById('hBal').innerText=bal.toFixed(0);if(bal<50){document.getElementById('walletLock').style.display='block';document.getElementById('buyerBidding').style.display='none';document.getElementById('verifySection').style.display='none';renderPendingDepForUser();}else{document.getElementById('walletLock').style.display='none';document.getElementById('buyerBidding').style.display='block';if(wallet.debt>0&&!verifs[wa+'_verified']){document.getElementById('verifySection').style.display='block';document.getElementById('vBottle').innerText=wallet.debtBottle;document.getElementById('vPrice').innerText=wallet.debtPrice;}renderLive();}renderWallet();}
-function renderLive(){let div=document.getElementById('liveList');div.innerHTML=bottles.filter(b=>b.approved).map(b=>`<div class="card" style="border-left:4px solid #0f0"><b>🥃 ${b.name}</b> - <b style="color:#f5c518">R${b.price}</b> - Stock ${b.stock}<br><span class="small">${b.company} • <span class="live-dot"></span> LIVE • Ends <span class="timerLive" data-ends="${b.ends}">${Math.floor((b.ends-Date.now())/60000)}m</span></span><br><button class="btn" ${wallet.balance<50?'disabled':''} onclick="placeBid('${b.name}',${b.price})">${wallet.balance<50?'🔒 Need R50':'Bid R'+(b.price+10)}</button></div>`).join('')||'No live bottles';}
-function renderWallet(){document.getElementById('balance').innerText=wallet.balance.toFixed(2);document.getElementById('hBal').innerText=wallet.balance.toFixed(0);document.getElementById('txList').innerHTML=wallet.tx.slice(-6).reverse().map(t=>`${t.time} - ${t.desc}`).join('<br>')||'No activity';document.getElementById('strikeInfo').innerText=`${strikes.count}/3`;document.getElementById('verifiedStatus').innerHTML=verifs[localStorage.getItem('bid_current_user')+'_verified']?'✅ Verified':'❌ Not verified';if(wallet.debt>0){document.getElementById('debtBox').style.display='block';document.getElementById('debt').innerText=wallet.debtPrice;document.getElementById('debtBottle').innerText=wallet.debtBottle;let left=wallet.debtExpiry-Date.now();if(left<=0){wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`❌ Failed pay - STRIKE`});strikes.count++;wallet.debt=0;save();}else{let h=Math.floor(left/3600000),m=Math.floor((left%3600000)/60000),s=Math.floor((left%60000)/1000);document.getElementById('timer').innerText=`${h}:${m}:${s}`;}}else{let db=document.getElementById('debtBox');if(db)db.style.display='none';}}
-setInterval(()=>{renderWallet();document.querySelectorAll('.timerLive').forEach(el=>{let ends=parseInt(el.dataset.ends);let left=ends-Date.now();if(left<=0)el.innerText='ENDED';else{let h=Math.floor(left/3600000),m=Math.floor((left%3600000)/60000),s=Math.floor((left%60000)/1000);el.innerText=`${h}:${m}:${s}`;}});},1000);renderWallet();
-// BUYER
-function buyerRegister(){let n=document.getElementById('bRegName').value.trim(),wa=document.getElementById('bRegWA').value.trim(),p=document.getElementById('bRegPass').value.trim();if(!n||!wa||!p)return alert('Fill all');localStorage.setItem('bid_user_'+wa,JSON.stringify({name:n,whatsapp:wa,password:p}));localStorage.setItem('bid_current_user',wa);document.getElementById('bRegMsg').innerHTML=`✅ Welcome ${n}`;setTimeout(()=>{showBuyerProfile();checkWalletLock();},800);}
-function buyerLogin(){let wa=document.getElementById('bLogWA').value.trim(),p=document.getElementById('bLogPass').value;let d=localStorage.getItem('bid_user_'+wa);if(!d)return document.getElementById('bLogMsg').innerText='❌ Not found';let u=JSON.parse(d);if(u.password!==p)return document.getElementById('bLogMsg').innerText='❌ Wrong pass';localStorage.setItem('bid_current_user',wa);showBuyerProfile();checkWalletLock();}
-function showBuyerProfile(){let wa=localStorage.getItem('bid_current_user');let u=JSON.parse(localStorage.getItem('bid_user_'+wa)||'{}');document.getElementById('buyerRegCard').style.display='none';document.getElementById('buyerLoginCard').style.display='none';document.getElementById('buyerProfileCard').style.display='block';document.getElementById('bProfName').innerText=u.name;document.getElementById('bProfWA').innerText=u.whatsapp;}
+function openPortal(p){document.getElementById('landing').style.display='none';if(p=='buyer'){document.getElementById('buyerArea').style.display='block';let wa=localStorage.getItem('phuza_current_user');if(wa){showBuyerProfile();checkWalletLock();}}else if(p=='seller'){document.getElementById('sellerArea').style.display='block';let wa=localStorage.getItem('phuza_current_company');if(wa)showSellerDash();}else if(p=='admin'){document.getElementById('adminArea').style.display='block';}}
+function checkWalletLock(){let wa=localStorage.getItem('phuza_current_user');if(!wa)return;let bal=wallet.balance;document.getElementById('lockBal').innerText=bal.toFixed(2);document.getElementById('hBal').innerText=bal.toFixed(0);if(bal<50){document.getElementById('walletLock').style.display='block';document.getElementById('buyerBidding').style.display='none';document.getElementById('verifySection').style.display='none';renderPendingDepForUser();}else{document.getElementById('walletLock').style.display='none';document.getElementById('buyerBidding').style.display='block';if(wallet.debt>0&&!verifs[wa+'_verified']){document.getElementById('verifySection').style.display='block';document.getElementById('vBottle').innerText=wallet.debtBottle;document.getElementById('vPrice').innerText=wallet.debtPrice;}renderLive();}renderWallet();}
+function renderLive(){
+let div=document.getElementById('liveList');
+div.innerHTML=bottles.filter(b=>b.approved).map(b=>{
+let isFlash=b.isFlash||b.duration<=30;
+let isExtended=(b.extends||0)>0;
+let timeLeft=b.ends-Date.now();
+let cardClass=isExtended?'card extended':isFlash?'card flash':'card';
+let flashBadge=isFlash?`<span class="badge-flash">⚡ FLASH ${b.duration}m</span>`:`<span class="badge">⏰ ${b.duration>=60?Math.floor(b.duration/60)+'h':b.duration+'m'}</span>`;
+let extendBadge=isExtended?`<span class="badge-extend">⏰ EXTENDED +${isFlash?'2m':'5m'} x${b.extends}!</span>`:'';
+return `<div class="${cardClass}" style="padding:0;overflow:hidden;border-left:4px solid ${isExtended?'#0f0':isFlash?'#f00':'#ff6b00'}">
+<img src="${b.photo}" class="bottle-img" onerror="this.src='https://images.unsplash.com/photo-1527281400683-1aae777175f8?w=400'">
+<div style="padding:12px">
+<b>🍻 ${b.name}</b> - <b style="color:#ff6b00">R${b.price}</b> ${flashBadge} ${extendBadge} <span class="badge">${b.category}</span><br>
+<span class="small">${b.desc||''}</span><br>
+<span class="small">📍 ${b.location} • 📦 ${b.stock} • Seller: ${b.company}</span><br>
+<span class="small">⏰ Ends: <span class="${isExtended?'countdown-extend':isFlash?'countdown-flash':''} timerLive" data-ends="${b.ends}" data-flash="${isFlash}" data-extends="${b.extends||0}">${isFlash?'⚡':''} ${Math.floor(timeLeft/60000)}m ${Math.floor((timeLeft%60000)/1000)}s ${isExtended?'⏰ EXTENDED!':''}</span></span><br>
+<button class="btn" style="${isFlash?'background:#f00':isExtended?'background:#0f0;color:#000':''}" ${wallet.balance<50?'disabled':''} onclick="placeBid(${b.id})">${wallet.balance<50?'🔒 Need R50 Phuza Wallet':isFlash?'⚡ FLASH BID R'+(b.price+10)+'!':isExtended?'⏰ EXTENDED BID R'+(b.price+10):'Phuza Bid R'+(b.price+10)}</button>
+</div></div>`;
+}).join('')||'<p class="small">No live Phuza bottles - Sellers post & admin approves</p>';
+}
+function renderWallet(){document.getElementById('balance').innerText=wallet.balance.toFixed(2);document.getElementById('hBal').innerText=wallet.balance.toFixed(0);document.getElementById('txList').innerHTML=wallet.tx.slice(-6).reverse().map(t=>`${t.time} - ${t.desc}`).join('<br>')||'No phuza activity yet';document.getElementById('strikeInfo').innerText=`${strikes.count}/3`;document.getElementById('verifiedStatus').innerHTML=verifs[localStorage.getItem('phuza_current_user')+'_verified']?'✅ Verified':'❌ Not verified';if(wallet.debt>0){document.getElementById('debtBox').style.display='block';document.getElementById('debt').innerText=wallet.debtPrice;document.getElementById('debtBottle').innerText=wallet.debtBottle;let left=wallet.debtExpiry-Date.now();if(left<=0){wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`❌ Failed pay - STRIKE`});strikes.count++;wallet.debt=0;save();}else{let h=Math.floor(left/3600000),m=Math.floor((left%3600000)/60000),s=Math.floor((left%60000)/1000);document.getElementById('timer').innerText=`${h}:${m}:${s}`;}}else{let db=document.getElementById('debtBox');if(db)db.style.display='none';}}
+setInterval(()=>{
+renderWallet();
+document.querySelectorAll('.timerLive').forEach(el=>{
+let ends=parseInt(el.dataset.ends);let left=ends-Date.now();
+let isFlash=el.dataset.flash==='true';
+let ext=parseInt(el.dataset.extends||0);
+if(left<=0){el.innerText='⚠️ PHUZA ENDED';el.style.color='#f00';}
+else{
+let m=Math.floor(left/60000);let s=Math.floor((left%60000)/1000);
+if(ext>0){el.innerHTML=`⏰ EXTENDED x${ext}! ${m}m ${s}s LEFT!`;el.className='countdown-extend timerLive';}
+else if(isFlash||m<5){el.innerText=`⚡ PHUZA FLASH ${m}m ${s}s LEFT!`;el.className='countdown-flash timerLive';}
+else{let h=Math.floor(left/3600000);let mm=Math.floor((left%3600000)/60000);el.innerText=`${h}h ${mm}m ${s}s`;el.className='timerLive';}
+}
+});
+},1000);
+renderWallet();
+function buyerRegister(){let n=document.getElementById('bRegName').value.trim(),wa=document.getElementById('bRegWA').value.trim(),p=document.getElementById('bRegPass').value.trim();if(!n||!wa||!p)return alert('Fill all');localStorage.setItem('phuza_user_'+wa,JSON.stringify({name:n,whatsapp:wa,password:p}));localStorage.setItem('phuza_current_user',wa);document.getElementById('bRegMsg').innerHTML=`✅ Welcome to Phuza ${n}!`;setTimeout(()=>{showBuyerProfile();checkWalletLock();},800);}
+function buyerLogin(){let wa=document.getElementById('bLogWA').value.trim(),p=document.getElementById('bLogPass').value;let d=localStorage.getItem('phuza_user_'+wa);if(!d)return document.getElementById('bLogMsg').innerText='❌ Not Phuza buyer';let u=JSON.parse(d);if(u.password!==p)return document.getElementById('bLogMsg').innerText='❌ Wrong pass';localStorage.setItem('phuza_current_user',wa);showBuyerProfile();checkWalletLock();}
+function showBuyerProfile(){let wa=localStorage.getItem('phuza_current_user');let u=JSON.parse(localStorage.getItem('phuza_user_'+wa)||'{}');document.getElementById('buyerRegCard').style.display='none';document.getElementById('buyerLoginCard').style.display='none';document.getElementById('buyerProfileCard').style.display='block';document.getElementById('bProfName').innerText=u.name;document.getElementById('bProfWA').innerText=u.whatsapp;}
 function showBuyerLogin(){document.getElementById('buyerRegCard').style.display='none';document.getElementById('buyerLoginCard').style.display='block';}
 function showBuyerReg(){document.getElementById('buyerRegCard').style.display='block';document.getElementById('buyerLoginCard').style.display='none';}
-function buyerLogout(){localStorage.removeItem('bid_current_user');location.reload();}
-function requestDeposit(){
-let wa=localStorage.getItem('bid_current_user');
-let amt=parseFloat(document.getElementById('depAmount').value),pin=document.getElementById('depPin').value.trim(),ref=document.getElementById('depRef').value.trim();
-if(!amt||amt<50)return alert('Min R50');if(!pin||pin.length<8)return alert('Enter PIN');if(!ref)return alert('Enter ref');
-let dep={id:Date.now(),whatsapp:wa,amount:amt,pin:pin,ref:ref,status:'pending',time:new Date().toLocaleString()};
-deposits.push(dep);save();
-document.getElementById('depMsg').innerHTML=`✅ Request R${amt} sent!`;
-// WHATSAPP ALERT TO ADMIN
-let msg = `🚨 BID.CO.ZA DEPOSIT ALERT!\n\n💰 Buyer requests R${amt}\n👤 Name: ${ref}\n📱 WhatsApp: ${wa}\n🎟️ 1Voucher PIN: ${pin}\n⏰ Time: ${new Date().toLocaleString()}\n\n✅ Approve in Admin Panel: ${window.location.href}\n\nAdmin Panel Password: admin123`;
-sendWAAlert(msg);
-renderPendingDepForUser();
-}
-function renderPendingDepForUser(){let wa=localStorage.getItem('bid_current_user');let my=deposits.filter(d=>d.whatsapp==wa);document.getElementById('pendingDepList').innerHTML=my.length?'<b>Your Requests:</b><br>'+my.map(d=>`R${d.amount} - ${d.status} - ...${d.pin.slice(-4)}`).join('<br>'):'No requests';}
-function placeBid(name,price){
-let wa=localStorage.getItem('bid_current_user');
-if(!wa){alert('Register as buyer');return;}
-if(wallet.balance<50)return alert(`🔒 Need R50 deposit!`);
-if(wallet.balance<price)return alert(`Need R${price} have R${wallet.balance.toFixed(2)}`);
+function buyerLogout(){localStorage.removeItem('phuza_current_user');location.reload();}
+function requestDeposit(){let wa=localStorage.getItem('phuza_current_user');let amt=parseFloat(document.getElementById('depAmount').value),pin=document.getElementById('depPin').value.trim(),ref=document.getElementById('depRef').value.trim();if(!amt||amt<50)return alert('Min R50');if(!pin||pin.length<8)return alert('Enter PIN');if(!ref)return alert('Enter ref');let dep={id:Date.now(),whatsapp:wa,amount:amt,pin:pin,ref:ref,status:'pending',time:new Date().toLocaleString()};deposits.push(dep);save();document.getElementById('depMsg').innerHTML=`✅ Phuza Request R${amt} sent!`;let msg=`🍻 PHUZA DEPOSIT ALERT!\n\n💰 R${amt}\n👤 ${ref}\n📱 ${wa}\n🎟️ PIN: ${pin}\n\nPhuza Auction - Approve: ${window.location.href}`;sendWAAlert(msg);renderPendingDepForUser();}
+function renderPendingDepForUser(){let wa=localStorage.getItem('phuza_current_user');let my=deposits.filter(d=>d.whatsapp==wa);document.getElementById('pendingDepList').innerHTML=my.length?'<b>Your Phuza Requests:</b><br>'+my.map(d=>`R${d.amount} - ${d.status} - ...${d.pin.slice(-4)}`).join('<br>'):'No requests';}
+function placeBid(bottleId){
+let wa=localStorage.getItem('phuza_current_user');
+if(!wa){alert('Join Phuza as buyer first');return;}
+if(wallet.balance<50)return alert(`🔒 Need R50 Phuza Wallet!`);
+let bottle=bottles.find(b=>b.id==bottleId);
+if(!bottle)return alert('Phuza bottle not found');
+if(wallet.balance<bottle.price)return alert(`Need R${bottle.price}`);
 if(wallet.debt>0)return alert(`Pay for ${wallet.debtBottle} first`);
-wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`🔨 Bid R${price+10} on ${name}`});save();
+let timeLeft=bottle.ends-Date.now();
+let isFlash=bottle.isFlash||bottle.duration<=30;
+let extendThreshold=isFlash?60*1000:5*60*1000;
+let extendAmount=isFlash?2*60*1000:5*60*1000;
+let willExtend=false;
+if(timeLeft<=extendThreshold && timeLeft>0){
+bottle.ends+=extendAmount;
+bottle.extends=(bottle.extends||0)+1;
+willExtend=true;
+save();
+renderLive();
+renderAdmin();
+let msg=`⏰ PHUZA AUTO-EXTEND!\n\nBottle ${bottle.name} extended +${isFlash?'2m':'5m'}!\nNew end: ${new Date(bottle.ends).toLocaleTimeString()}\nBid by ${wa}\nTotal extends: ${bottle.extends}\n\nPhuza Auction - No sniping!`;
+sendWAAlert(msg);
+alert(`⏰ PHUZA AUTO-EXTEND! ⏰\n\nSomeone bid last ${isFlash?'60 seconds':'5 mins'}!\n\nPhuza Bottle extended +${isFlash?'2 mins':'5 mins'}!\nNew time: ${Math.floor((bottle.ends-Date.now())/60000)}m left!\n\nFair Phuza bidding!`);
+}
+wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`🔨 Phuza Bid R${bottle.price+10} on ${bottle.name}${willExtend?' ⏰ EXTENDED!':''}`});save();
 setTimeout(()=>{
-if(Math.random()>0.4){
-wallet.debt=1;wallet.debtBottle=name;wallet.debtPrice=price+10;wallet.debtExpiry=Date.now()+24*3600000;
-wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`🏆 WON ${name} R${price+10}`});save();
-document.getElementById('verifySection').style.display='block';document.getElementById('vBottle').innerText=name;document.getElementById('vPrice').innerText=price+10;
-// WHATSAPP ALERT - WINNER
-let msg = `🏆 BID.CO.ZA WINNER ALERT!\n\nBuyer ${wa} WON ${name} for R${price+10}\n\nBuyer must verify ID + Address before paying!\nCheck Admin Panel for ID verification.\n\nTime: ${new Date().toLocaleString()}`;
-sendWAAlert(msg);
-alert(`🏆 WON ${name} for R${price+10}! Verify ID! Admin alerted via WhatsApp!`);
-}else{wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`❌ Outbid on ${name}`});save();alert('Outbid!');}
-},1200);
+if(Math.random()>0.3){
+wallet.debt=1;wallet.debtBottle=bottle.name;wallet.debtPrice=bottle.price+10;wallet.debtExpiry=Date.now()+24*3600000;
+wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`🏆 PHUZA WON ${bottle.name} R${bottle.price+10}`});save();
+document.getElementById('verifySection').style.display='block';document.getElementById('vBottle').innerText=bottle.name;document.getElementById('vPrice').innerText=bottle.price+10;
+let msg=`🏆 PHUZA WINNER!\n\nBuyer ${wa} WON ${bottle.name} R${bottle.price+10} ${willExtend?`After ${bottle.extends} extends!`:''}\n\nPhuza Auction!`;sendWAAlert(msg);
+alert(`🏆 PHUZA WON! 🏆\n\nYou won ${bottle.name} for R${bottle.price+10}! ${willExtend?`After ${bottle.extends} extends!`:''}\n\nVerify ID to get your phuza!`);
+}else{wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`❌ Outbid on ${bottle.name}`});save();alert('Phuza Outbid! Someone bid higher - Try again! '+(willExtend?'But auction extended!':' '));}
+},800);
 }
-function checkAge(id){let el=document.getElementById('vAgeCheck');if(id.length>=6){let y=parseInt(id.substring(0,2));let fy=y<25?2000+y:1900+y;let age=new Date().getFullYear()-fy;el.innerHTML=age>=18?`✅ Age ${age} OK`:`❌ Age ${age} Must 18+`;el.style.color=age>=18?'#0f0':'#f00';}}
-function submitVerification(){let wa=localStorage.getItem('bid_current_user');let id=document.getElementById('vID').value.trim(),addr=document.getElementById('vAddress').value.trim(),agree=document.getElementById('vAgree').checked;if(!id||!addr)return alert('Fill ID+Address');if(id.length!=13)return alert('ID 13 digits');if(!agree)return alert('Agree');verifs[wa+'_verified']=true;verifs[wa+'_data']={id,address:addr,time:new Date().toLocaleString()};save();document.getElementById('vMsg').innerHTML='✅ Verified!';
-// WHATSAPP ALERT - ID VERIFIED
-let msg = `✅ BID.CO.ZA ID VERIFIED!\n\nBuyer ${wa} verified ID!\nID: ${id}\nAddress: ${addr}\nBottle: ${wallet.debtBottle} R${wallet.debtPrice}\n\nBuyer can now pay! Check Admin Panel.`;
-sendWAAlert(msg);
-setTimeout(()=>document.getElementById('verifySection').style.display='none',1000);
-}
-function cancelWin(){if(confirm('Cancel = Strike!')){strikes.count++;wallet.debt=0;wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`❌ Cancelled - Strike`});save();document.getElementById('verifySection').style.display='none';}}
-function payDebt(){if(!verifs[localStorage.getItem('bid_current_user')+'_verified'])return alert('Verify ID first');if(wallet.balance<wallet.debtPrice)return alert('Need more balance');wallet.balance-=wallet.debtPrice;wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`✅ Paid R${wallet.debtPrice} for ${wallet.debtBottle}`});wallet.debt=0;wallet.debtBottle="";wallet.debtPrice=0;wallet.debtExpiry=0;save();renderWallet();alert('✅ Paid!');}
-// SELLER
-function sellerRegister(){
-let n=document.getElementById('sRegName').value.trim(),r=document.getElementById('sRegNo').value.trim(),l=document.getElementById('sRegLicense').value.trim(),o=document.getElementById('sRegOwner').value.trim(),wa=document.getElementById('sRegWA').value.trim(),a=document.getElementById('sRegAddr').value.trim(),p=document.getElementById('sRegPass').value.trim();
-if(!n||!r||!l||!o||!wa||!a||!p)return alert('Fill all');
-companies[wa]={name:n,reg:r,license:l,owner:o,whatsapp:wa,address:a,password:p,status:'pending',joined:new Date().toLocaleString()};save();
-document.getElementById('sRegMsg').innerHTML='✅ Submitted! Admin will WhatsApp alert!';
-// WHATSAPP ALERT - NEW COMPANY
-let msg = `🏪 BID.CO.ZA NEW SELLER!\n\nCompany: ${n}\nReg: ${r}\nLicense: ${l}\nOwner: ${o}\nWhatsApp: ${wa}\nAddress: ${a}\n\nNeeds Admin Approval!\nAdmin: ${window.location.href}`;
-sendWAAlert(msg);
-}
-function sellerLogin(){let wa=document.getElementById('sLogWA').value.trim(),p=document.getElementById('sLogPass').value;let c=companies[wa];if(!c)return document.getElementById('sLogMsg').innerText='❌ Not found';if(c.password!==p)return document.getElementById('sLogMsg').innerText='❌ Wrong pass';localStorage.setItem('bid_current_company',wa);showSellerDash();}
-function showSellerDash(){let wa=localStorage.getItem('bid_current_company');let c=companies[wa];if(!c)return;document.getElementById('sellerRegCard').style.display='none';document.getElementById('sellerLoginCard').style.display='none';document.getElementById('sellerProfileCard').style.display='block';document.getElementById('sellerDash').style.display='block';document.getElementById('sProfName').innerText=c.name;document.getElementById('sProfStatus').innerHTML=c.status=='approved'?'<span style="color:#0f0">✅ APPROVED</span>':c.status=='rejected'?'<span style="color:#f00">❌ REJECTED</span>':'<span style="color:#ff0">⏳ PENDING</span>';document.getElementById('sProfLicense').innerText=c.license;renderMyBottles();}
+function checkAge(id){let el=document.getElementById('vAgeCheck');if(id.length>=6){let y=parseInt(id.substring(0,2));let fy=y<25?2000+y:1900+y;let age=new Date().getFullYear()-fy;el.innerHTML=age>=18?`✅ Age ${age} OK - Can Phuza`:`❌ Age ${age} Must 18+ to Phuza`;el.style.color=age>=18?'#0f0':'#f00';}}
+function submitVerification(){let wa=localStorage.getItem('phuza_current_user');let id=document.getElementById('vID').value.trim(),addr=document.getElementById('vAddress').value.trim(),agree=document.getElementById('vAgree').checked;if(!id||!addr)return alert('Fill ID+Address');if(id.length!=13)return alert('ID 13 digits');if(!agree)return alert('Agree');verifs[wa+'_verified']=true;verifs[wa+'_data']={id,address:addr,time:new Date().toLocaleString()};save();document.getElementById('vMsg').innerHTML='✅ Verified for Phuza!';let msg=`✅ PHUZA ID VERIFIED!\n\nBuyer ${wa} ID ${id} Address ${addr} Bottle ${wallet.debtBottle}\n\nCan pay for Phuza!`;sendWAAlert(msg);setTimeout(()=>document.getElementById('verifySection').style.display='none',1000);}
+function cancelWin(){if(confirm('Cancel Phuza win = Strike!')){strikes.count++;wallet.debt=0;wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`❌ Cancelled Phuza - Strike`});save();document.getElementById('verifySection').style.display='none';}}
+function payDebt(){if(!verifs[localStorage.getItem('phuza_current_user')+'_verified'])return alert('Verify ID first');if(wallet.balance<wallet.debtPrice)return alert('Need more Phuza balance');wallet.balance-=wallet.debtPrice;wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`✅ Paid R${wallet.debtPrice} for ${wallet.debtBottle} - Phuza Delivery!`});wallet.debt=0;wallet.debtBottle="";wallet.debtPrice=0;wallet.debtExpiry=0;save();renderWallet();alert('✅ Phuza Paid! Delivery booked - Check WhatsApp');}
+function previewPhoto(input){if(input.files && input.files[0]){let file=input.files[0];if(file.size>2*1024*1024){alert('Max 2MB - Compress photo');return;}let r=new FileReader();r.onload=function(e){tempPhotoBase64=e.target.result;document.getElementById('photoPreview').style.display='block';document.getElementById('previewImg').src=tempPhotoBase64;document.getElementById('photoName').innerText=`✅ ${file.name} - ${(file.size/1024).toFixed(0)}KB`;};r.readAsDataURL(file);}}
+function clearPhoto(){tempPhotoBase64=null;document.getElementById('bPhoto').value='';document.getElementById('photoPreview').style.display='none';}
+function sellerRegister(){let n=document.getElementById('sRegName').value.trim(),r=document.getElementById('sRegNo').value.trim(),l=document.getElementById('sRegLicense').value.trim(),o=document.getElementById('sRegOwner').value.trim(),wa=document.getElementById('sRegWA').value.trim(),a=document.getElementById('sRegAddr').value.trim(),p=document.getElementById('sRegPass').value.trim();if(!n||!r||!l||!o||!wa||!a||!p)return alert('Fill all');companies[wa]={name:n,reg:r,license:l,owner:o,whatsapp:wa,address:a,password:p,status:'pending',joined:new Date().toLocaleString()};save();document.getElementById('sRegMsg').innerHTML='✅ Joined Phuza Sellers! Admin alerted!';let msg=`🏪 PHUZA NEW SELLER!\n\nCompany: ${n}\nReg: ${r}\nLicense: ${l}\nOwner: ${o}\nWA: ${wa}\nAddr: ${a}\n\nApprove: ${window.location.href}`;sendWAAlert(msg);}
+function sellerLogin(){let wa=document.getElementById('sLogWA').value.trim(),p=document.getElementById('sLogPass').value;let c=companies[wa];if(!c)return document.getElementById('sLogMsg').innerText='❌ Not Phuza seller';if(c.password!==p)return document.getElementById('sLogMsg').innerText='❌ Wrong pass';localStorage.setItem('phuza_current_company',wa);showSellerDash();}
+function showSellerDash(){let wa=localStorage.getItem('phuza_current_company');let c=companies[wa];if(!c)return;document.getElementById('sellerRegCard').style.display='none';document.getElementById('sellerLoginCard').style.display='none';document.getElementById('sellerProfileCard').style.display='block';document.getElementById('sellerDash').style.display='block';document.getElementById('sProfName').innerText=c.name;document.getElementById('sProfStatus').innerHTML=c.status=='approved'?'<span style="color:#0f0">✅ APPROVED</span>':c.status=='rejected'?'<span style="color:#f00">❌ REJECTED</span>':'<span style="color:#ff0">⏳ PENDING ADMIN</span>';document.getElementById('sProfLicense').innerText=c.license+' | '+c.address;renderMyBottles();}
 function showSellerLogin(){document.getElementById('sellerRegCard').style.display='none';document.getElementById('sellerLoginCard').style.display='block';}
 function showSellerReg(){document.getElementById('sellerRegCard').style.display='block';document.getElementById('sellerLoginCard').style.display='none';}
-function sellerLogout(){localStorage.removeItem('bid_current_company');location.reload();}
-function renderMyBottles(){let wa=localStorage.getItem('bid_current_company');let my=bottles.filter(b=>b.companyWA==wa);document.getElementById('myBottles').innerHTML=my.map(b=>`${b.name} R${b.price} - ${b.approved?'✅ LIVE':'⏳ Pending'}<br>`).join('')||'No bottles';}
+function sellerLogout(){localStorage.removeItem('phuza_current_company');location.reload();}
+function renderMyBottles(){let wa=localStorage.getItem('phuza_current_company');let my=bottles.filter(b=>b.companyWA==wa);document.getElementById('myBottles').innerHTML=my.map(b=>`<div style="background:#000;padding:10px;border-radius:10px;margin:8px 0;border:1px solid ${b.extends>0?'#0f0':b.approved?'#0f0':'#ff0'}"><img src="${b.photo}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;float:left;margin-right:10px"><b>${b.name}</b> ${b.isFlash?'<span style="color:#f00">⚡ FLASH '+b.duration+'m</span>':''} ${b.extends>0?`<span style="color:#0f0">⏰ EXTENDED x${b.extends}!</span>`:''} R${b.price} Stock ${b.stock}<br><span class="small">${b.category} • ${b.location} • ${b.duration>=60?Math.floor(b.duration/60)+'h':b.duration+'m'} ${b.extends?`+ Ext x${b.extends}`:''}</span><br><span class="small">${b.approved?'✅ LIVE Ends '+new Date(b.ends).toLocaleTimeString():'⏳ Pending Phuza Admin'}</span><div style="clear:both"></div></div>`).join('')||'No Phuza bottles yet - Post with photo!';}
 function postBottle(){
-let wa=localStorage.getItem('bid_current_company');let c=companies[wa];if(c.status!=='approved')return alert('Not approved yet');let n=document.getElementById('bName').value.trim(),pr=parseFloat(document.getElementById('bPrice').value),st=parseInt(document.getElementById('bStock').value);
-if(!n||!pr)return alert('Fill name+price');
-bottles.push({id:Date.now(),name:n,price:pr,stock:st||1,company:c.name,companyWA:wa,approved:false,live:false,ends:Date.now()+24*3600000,auth:"94"});save();
-document.getElementById('bMsg').innerText='✅ Submitted! Admin alerted via WhatsApp!';
-// WHATSAPP ALERT - NEW BOTTLE
-let msg = `🍾 BID.CO.ZA NEW BOTTLE!\n\nSeller: ${c.name} (${wa})\nBottle: ${n} R${pr} Stock ${st}\n\nNeeds Approval to go LIVE!\nAdmin: ${window.location.href}`;
-sendWAAlert(msg);
-renderMyBottles();
+let wa=localStorage.getItem('phuza_current_company');let c=companies[wa];if(!c)return alert('Login as Phuza seller');if(c.status!=='approved')return alert('❌ Not approved - Wait Phuza admin approval');
+let n=document.getElementById('bName').value.trim(),pr=parseFloat(document.getElementById('bPrice').value),st=parseInt(document.getElementById('bStock').value),cat=document.getElementById('bCategory').value,desc=document.getElementById('bDesc').value.trim(),loc=document.getElementById('bLocation').value.trim(),dur=parseInt(document.getElementById('bDuration').value),auth=document.getElementById('bAuth').value;
+if(!n||!pr||!st)return alert('Fill Name+Price+Stock');if(!tempPhotoBase64)return alert('📸 Upload photo - Phuza buyer must see!');if(!desc)return alert('Add description');if(!loc)return alert('Add location');
+let ends=Date.now()+dur*60*1000;let isFlash=dur<=30;
+let bottle={id:Date.now(),name:(isFlash?'⚡ FLASH - ':'')+n,price:pr,stock:st,category:cat,desc:desc,location:loc,photo:tempPhotoBase64,duration:dur,auth:auth,company:c.name,companyWA:wa,approved:false,live:false,ends:ends,isFlash:isFlash,extends:0,originalEnds:ends};
+bottles.push(bottle);save();
+document.getElementById('bMsg').innerHTML=`✅ ${isFlash?'⚡ FLASH':'Normal'} Phuza bottle posted! Duration ${dur>=60?Math.floor(dur/60)+'h':dur+'m'} + Auto-Extend ${isFlash?'+2m if last 60s':'+5m if last 5m'} - Waiting Phuza admin`;
+let msg=`${isFlash?'⚡ PHUZA FLASH!':'🍾 PHUZA NEW BOTTLE!'}\n\nSeller: ${c.name} (${wa})\nBottle: ${n}\nPrice: R${pr} Stock ${st}\nDuration: ${dur}m ${isFlash?'(FLASH)':''}\nLocation: ${loc}\nHas Photo: Yes ✅\nAuto-Extend: ${isFlash?'+2m':'+5m'}\n\nApprove: ${window.location.href}`;sendWAAlert(msg);
+clearPhoto();document.getElementById('bName').value='';document.getElementById('bPrice').value='';document.getElementById('bStock').value='';document.getElementById('bDesc').value='';renderMyBottles();
 }
-// ADMIN
-function adminLogin(){let p=document.getElementById('adminPass').value;if(p!=='admin123'&&p!=='bid2024')return alert('Wrong');document.getElementById('adminContent').style.display='block';renderAdmin();}
-function renderAdmin(){let pd=document.getElementById('pendingDeposits');pd.innerHTML=deposits.length?deposits.map(d=>`<div style="background:#000;padding:10px;border-radius:8px;margin:6px 0;border:2px solid ${d.status=='pending'?'#ff0':'#0f0'}"><b>R${d.amount} - ${d.whatsapp}</b> - ${d.ref}<br><span class="small">PIN: ${d.pin} - ${d.time} - ${d.status}</span><br>${d.status=='pending'?`<button class="btn" style="background:#0f0;padding:6px;width:48%;display:inline-block" onclick="approveDeposit(${d.id})">Approve</button> <button class="btn" style="background:#f00;color:#fff;padding:6px;width:48%;display:inline-block" onclick="rejectDeposit(${d.id})">Reject</button>`:''}</div>`).join(''):'No deposits';let pc=document.getElementById('pendingCompanies');pc.innerHTML=Object.values(companies).map(c=>`<div style="background:#000;padding:8px;border-radius:8px;margin:6px 0"><b>${c.name}</b> - ${c.license} - ${c.whatsapp} - ${c.status}<br>${c.status=='pending'?`<button class="btn" style="background:#0f0;padding:6px;width:48%;display:inline-block" onclick="approveCompany('${c.whatsapp}')">Approve</button> <button class="btn" style="background:#f00;color:#fff;padding:6px;width:48%;display:inline-block" onclick="rejectCompany('${c.whatsapp}')">Reject</button>`:''}</div>`).join('')||'No companies';let pb=document.getElementById('pendingBottles');pb.innerHTML=bottles.map(b=>`<div style="background:#000;padding:8px;border-radius:8px;margin:6px 0"><b>${b.name}</b> R${b.price} - ${b.company} - ${b.approved?'✅ LIVE':'⏳ Pending'}<br>${!b.approved?`<button class="btn" style="background:#0f0;padding:6px;width:48%;display:inline-block" onclick="approveBottle(${b.id})">Approve LIVE</button> <button class="btn" style="background:#f00;color:#fff;padding:6px;width:48%;display:inline-block" onclick="rejectBottle(${b.id})">Reject</button>`:''}</div>`).join('')||'No bottles';let pv=document.getElementById('pendingVerifs');pv.innerHTML=Object.keys(verifs).filter(k=>k.endsWith('_data')).map(k=>{let wa=k.replace('_data','');let d=verifs[k];return `<div style="background:#000;padding:8px;border-radius:8px;margin:6px 0"><b>${wa}</b> - ID ${d.id} - ${d.address}</div>`}).join('')||'No verifs';document.getElementById('adminStats').innerHTML=`Buyers: ${Object.keys(localStorage).filter(k=>k.startsWith('bid_user_')).length}<br>Companies: ${Object.keys(companies).length}<br>Bottles: ${bottles.length}<br>Deposits: ${deposits.length} - Pending ${deposits.filter(d=>d.status=='pending').length}`;}
-function approveDeposit(id){let d=deposits.find(x=>x.id==id);if(!d)return;d.status='approved';wallet.balance+=d.amount;wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`✅ Admin Approved R${d.amount}`});save();renderAdmin();alert(`✅ Approved R${d.amount} for ${d.whatsapp}`);}
+function adminLogin(){let p=document.getElementById('adminPass').value;if(p!=='phuza123'&&p!=='admin123'&&p!=='bid2024')return alert('Wrong - Try phuza123');document.getElementById('adminContent').style.display='block';renderAdmin();}
+function renderAdmin(){
+let pd=document.getElementById('pendingDeposits');pd.innerHTML=deposits.length?deposits.map(d=>`<div style="background:#000;padding:10px;border-radius:8px;margin:6px 0;border:2px solid ${d.status=='pending'?'#ff0':'#0f0'}"><b>R${d.amount} - ${d.whatsapp}</b> - ${d.ref}<br><span class="small">PIN: ${d.pin} - ${d.time} - ${d.status}</span><br>${d.status=='pending'?`<button class="btn" style="background:#0f0;padding:6px;width:48%;display:inline-block" onclick="approveDeposit(${d.id})">Approve</button> <button class="btn" style="background:#f00;color:#fff;padding:6px;width:48%;display:inline-block" onclick="rejectDeposit(${d.id})">Reject</button>`:''}</div>`).join(''):'No Phuza deposits';
+let pc=document.getElementById('pendingCompanies');pc.innerHTML=Object.values(companies).map(c=>`<div style="background:#000;padding:8px;border-radius:8px;margin:6px 0"><b>${c.name}</b> - ${c.license} - ${c.whatsapp} - ${c.status}<br><span class="small">${c.owner} • ${c.address}</span><br>${c.status=='pending'?`<button class="btn" style="background:#0f0;padding:6px;width:48%;display:inline-block" onclick="approveCompany('${c.whatsapp}')">Approve Phuza Seller</button> <button class="btn" style="background:#f00;color:#fff;padding:6px;width:48%;display:inline-block" onclick="rejectCompany('${c.whatsapp}')">Reject</button>`:''}</div>`).join('')||'No Phuza sellers';
+let pb=document.getElementById('pendingBottles');pb.innerHTML=bottles.map(b=>`<div style="background:#000;padding:10px;border-radius:8px;margin:6px 0;border:2px solid ${b.extends>0?'#0f0':b.isFlash?'#f00':b.approved?'#0f0':'#ff0'}"><img src="${b.photo}" style="width:50px;height:50px;object-fit:cover;border-radius:6px;float:left;margin-right:8px"><b>${b.name}</b> R${b.price} ${b.isFlash?'<span style="color:#f00">⚡ FLASH '+b.duration+'m</span>':''} ${b.extends>0?`<span style="color:#0f0">⏰ EXTENDED x${b.extends}!</span>`:''}<br><span class="small">${b.company} - ${b.location} - Ends ${new Date(b.ends).toLocaleTimeString()} ${b.extends?`(Original ${new Date(b.originalEnds).toLocaleTimeString()})`:''} - ${b.approved?'✅ LIVE':'⏳ Pending'}</span><br><span class="small">${b.desc}</span><br>${!b.approved?`<button class="btn" style="background:#0f0;padding:6px;width:48%;display:inline-block" onclick="approveBottle(${b.id})">✅ Approve Phuza LIVE</button> <button class="btn" style="background:#f00;color:#fff;padding:6px;width:48%;display:inline-block" onclick="rejectBottle(${b.id})">❌ Reject</button>`:''}<div style="clear:both"></div></div>`).join('')||'No Phuza bottles';
+let pv=document.getElementById('pendingVerifs');pv.innerHTML=Object.keys(verifs).filter(k=>k.endsWith('_data')).map(k=>{let wa=k.replace('_data','');let d=verifs[k];return `<div style="background:#000;padding:8px;border-radius:8px;margin:6px 0"><b>Phuza Buyer ${wa}</b> - ID ${d.id} - ${d.address}<br><span class="small">${d.time}</span></div>`}).join('')||'No Phuza verifications';
+document.getElementById('adminStats').innerHTML=`Phuza Buyers: ${Object.keys(localStorage).filter(k=>k.startsWith('phuza_user_')).length}<br>Phuza Sellers: ${Object.keys(companies).length}<br>Phuza Bottles: ${bottles.length} Live: ${bottles.filter(b=>b.approved).length} Flash: ${bottles.filter(b=>b.isFlash&&b.approved).length} Extended: ${bottles.filter(b=>b.extends>0).length} Total Extends: ${bottles.reduce((s,b)=>s+(b.extends||0),0)}<br>Phuza Deposits: ${deposits.length} Pending: ${deposits.filter(d=>d.status=='pending').length}<br>Total Phuza Wallet: R${wallet.balance.toFixed(2)}`;
+}
+function approveDeposit(id){let d=deposits.find(x=>x.id==id);if(!d)return;d.status='approved';wallet.balance+=d.amount;wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`✅ Phuza Admin Approved R${d.amount}`});save();renderAdmin();alert(`✅ Phuza Approved R${d.amount} for ${d.whatsapp} - Can bid now!`);}
 function rejectDeposit(id){deposits=deposits.filter(x=>x.id!=id);save();renderAdmin();}
-function approveCompany(wa){companies[wa].status='approved';save();renderAdmin();}
+function approveCompany(wa){companies[wa].status='approved';save();renderAdmin();alert(`✅ Phuza Seller ${companies[wa].name} approved!`);}
 function rejectCompany(wa){companies[wa].status='rejected';save();renderAdmin();}
-function approveBottle(id){let b=bottles.find(x=>x.id==id);if(b){b.approved=true;b.live=true;b.ends=Date.now()+24*3600000;save();renderAdmin();}}
+function approveBottle(id){let b=bottles.find(x=>x.id==id);if(b){b.approved=true;b.live=true;if(!b.originalEnds)b.originalEnds=b.ends;save();renderAdmin();renderLive();alert(`✅ Phuza ${b.name} now LIVE for ${b.duration} mins! Auto-Extend: ${b.isFlash?'+2m if last 60s':'+5m if last 5m'} - Ends ${new Date(b.ends).toLocaleString()}`);}}
 function rejectBottle(id){bottles=bottles.filter(x=>x.id!=id);save();renderAdmin();}
 </script>
 </body>
