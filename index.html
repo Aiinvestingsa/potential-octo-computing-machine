@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#090909">
-<title>PHUZA AUCTION | Shared Auctions</title>
+<title>PHUZA AUCTION | Supabase Live 5 Levels</title>
 <style>
 :root{--bg:#090909;--panel:#151515;--line:#303030;--orange:#ff6b00;--gold:#ffcc00;--muted:#aaa;--green:#22dd55;--red:#ff4949}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:#fff;font:15px/1.45 Arial,sans-serif;padding-bottom:35px}
@@ -21,17 +21,38 @@ button.secondary{background:#292929;border:1px solid #444}button.gold{background
 .error{color:#ff9292}.success{color:#85ff9a}.auction{border:1px solid #333;background:#0d0d0d;border-radius:12px;padding:12px;margin:8px 0}
 .auction h3{color:#ffb16e}.tag{font-size:11px;border-radius:20px;padding:4px 8px;background:#382000;color:#ffc58b}
 .list{font-size:13px}.list div{padding:8px 0;border-bottom:1px solid #292929;overflow-wrap:anywhere}
-.hidden{display:none!important}footer{color:#888;text-align:center;font-size:12px;padding:20px}
+.hidden{display:none!important}
+.level-bar{display:flex;gap:3px;margin:6px 0}.level-segment{flex:1;height:10px;background:#222;border-radius:6px}.level-segment.filled{background:var(--orange)}.level-segment.active{background:#a0f;border:1px solid #fff}
+footer{color:#888;text-align:center;font-size:12px;padding:20px}
+.levelUpModal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.95);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.levelUpContent{background:linear-gradient(135deg,#1a0033,#332200);border:3px solid var(--gold);border-radius:20px;padding:20px;text-align:center;max-width:400px;width:100%}
 @media(max-width:650px){.grid{grid-template-columns:1fr}.row.mobile{flex-direction:column;align-items:stretch}.brand{font-size:17px}main{padding:9px}}
 </style>
 </head>
 <body>
 <header><div class="brand">🍻 PHUZA AUCTION</div><div id="userStatus" class="small">Connecting…</div></header>
+
+<div id="levelUpModal" class="levelUpModal">
+<div class="levelUpContent">
+<div style="font-size:30px">🎉🎉🎉</div>
+<h1 style="color:#ffcc00;margin:10px 0" id="luTitle">LEVEL UP!</h1>
+<h2 style="color:#22dd55;margin:5px 0" id="luLevel">LEVEL 2 REACHED!</h2>
+<p style="color:#fff;font-size:14px" id="luDesc">You had 50 refs → Now 51 refs!</p>
+<div style="background:#000;padding:10px;border-radius:10px;margin:10px 0;border:2px dashed #22dd55">
+<p style="color:#a0f;font-weight:900;margin:5px 0" id="luOld">Old: LVL1 R5/ref</p>
+<p style="color:#22dd55;font-weight:900;font-size:18px;margin:5px 0" id="luNew">New: LVL2 R9/ref!</p>
+<p class="small" id="luEarn">Next referral R9!</p>
+</div>
+<button class="gold" style="width:100%;padding:12px;border-radius:10px;font-weight:900" onclick="document.getElementById('levelUpModal').style.display='none'">🎉 CLAIM LEVEL UP!</button>
+</div>
+</div>
+
 <main>
   <section class="hero">
     <div style="font-size:38px">🍾🏆</div><h1>PHUZA AUCTION</h1>
-    <p>Shared auctions, live bids, referrals and a public leaderboard.</p>
-    <span class="tag">SUPABASE CONNECTED APP</span>
+    <p>Shared auctions, 5 Levels R5/R9/R13/R15/R20, Level-Up Notify at 51/101/201/501, Daily Streak R50 bonus, R50 Voucher fee, R500/m withdraw limit, Weekly Leaderboard bottle.</p>
+    <span class="tag">SUPABASE LIVE: xujsnnbmrpozejxjzpvdc</span>
+    <div id="streakBanner" class="notice hidden"></div>
   </section>
   <div id="configWarning" class="notice hidden">Add your Supabase Project URL and publishable key in <b>config.js</b>, then reload.</div>
   <div id="message" class="notice hidden" role="status"></div>
@@ -42,40 +63,48 @@ button.secondary{background:#292929;border:1px solid #444}button.gold{background
         <label for="email">Email</label><input id="email" type="email" autocomplete="email" placeholder="you@example.com">
         <label for="password">Password</label><input id="password" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters">
         <label for="displayName">Display name (for registration)</label><input id="displayName" maxlength="40" placeholder="Your display name">
-        <label for="referralCode">Referral code (optional)</label><input id="referralCode" maxlength="16" placeholder="Friend's referral code">
+        <label for="referralCode">Referral code (optional)</label><input id="referralCode" maxlength="16" placeholder="Friend's PHUZA-XXXX - He gets R5-R20 when you pay R50 voucher!">
         <div class="row mobile"><button id="signupBtn">Register</button><button id="loginBtn" class="secondary">Log in</button></div>
-        <p class="small">Use a valid email. If email confirmation is enabled, confirm your address before logging in.</p>
+        <p class="small">Referral only paid if you pay R50 voucher service fee via 1Voucher. Level-Up Notify at 51/101/201/501 refs. Daily streak 7 days = R50 extra.</p>
       </div>
       <div id="signedIn" class="hidden">
         <p>Signed in as <b id="signedInEmail"></b></p>
         <p class="small">Your referral code: <b id="myReferralCode">—</b></p>
-        <button id="copyReferralBtn" class="gold">Copy referral link</button>
+        <div class="level-bar"><div class="level-segment filled" id="seg1"></div><div class="level-segment" id="seg2"></div><div class="level-segment" id="seg3"></div><div class="level-segment" id="seg4"></div><div class="level-segment" id="seg5"></div></div>
+        <p class="small" id="levelInfoText">Level 1: 1-50 R5 • Level2 51-100 R9 🔔 • Level3 101-200 R13 • Level4 201-500 R15 • Level5 501-1000 R20</p>
+        <button id="copyReferralBtn" class="gold">Copy referral link - Share to earn R5-R20!</button>
         <button id="logoutBtn" class="secondary">Log out</button>
       </div>
     </div>
     <div class="card">
       <h2>Shared activity</h2>
       <div class="row"><div><div class="small">Open auctions</div><h2 id="auctionCount">0</h2></div><div><div class="small">Leaderboard users</div><h2 id="leaderCount">0</h2></div></div>
-      <p class="small">Auction and bid data is shared between users. Wallet transactions are read-only to normal users and must be created by trusted server-side processes.</p>
-      <div class="notice">This starter does not process real payments or withdrawals. Do not promise cash rewards or accept deposits until legal, payment, age-verification and security requirements are implemented.</div>
+      <p class="small">Wallet transactions are read-only to normal users and must be created by trusted server-side processes. Only R50+ voucher triggers referral bonus R5-R20.</p>
+      <div class="notice">R50 VOUCHER SERVICE FEE REQUIRED TO BID + TRIGGER REFERRAL BONUS + LEVEL-UP NOTIFY. Withdraw limit R500/m. Weekly leaderboard top 3 win bottle + R50-R200. Daily streak 7 days = R50 bonus.</div>
     </div>
   </section>
   <section class="card">
     <div class="between"><h2>Auctions</h2><button id="refreshBtn" class="secondary">Refresh</button></div>
     <div id="createAuctionArea" class="hidden">
-      <h3>Create a listing</h3>
-      <div class="row mobile"><input id="newTitle" maxlength="100" placeholder="Listing title"><input id="newDescription" maxlength="500" placeholder="Description"></div>
+      <h3>Create a listing - Need R50 voucher fee in wallet!</h3>
+      <div class="row mobile"><input id="newTitle" maxlength="100" placeholder="Listing title - e.g. Jameson 750ml"><input id="newDescription" maxlength="500" placeholder="Description"></div>
       <div class="row mobile"><input id="newStartPrice" type="number" min="1" step="0.01" placeholder="Starting price (R)"><button id="createAuctionBtn">Publish listing</button></div>
-      <p class="small">Listings are public. Only signed-in users can create listings.</p>
+      <p class="small">Listings are public. Only signed-in users with R50 voucher fee can create listings.</p>
     </div>
     <div id="auctions" class="list"><p class="muted">Loading auctions…</p></div>
   </section>
   <section class="grid">
-    <div class="card"><h2>Leaderboard</h2><p class="small">Ranks users by confirmed referrals. No wallet amounts are exposed.</p><div id="leaderboard" class="list">Loading…</div></div>
-    <div class="card"><h2>My wallet records</h2><p class="small">If trusted administrators or server-side functions add ledger entries, you can view your own records here. You cannot create or edit wallet records from this page.</p><div id="wallet" class="list">Sign in to view your records.</div></div>
+    <div class="card"><h2>🏆 Leaderboard - Top 3 Win Bottle Weekly + Daily Streak</h2><p class="small">Ranks users by confirmed referrals. Only R50 voucher fee counts. Level-Up Notify at 51/101/201/501. Daily streak 7 days = R50 extra.</p><div id="leaderboard" class="list">Loading…</div></div>
+    <div class="card"><h2>💳 My wallet records - R50 Voucher Fee + R500/m Limit</h2><p class="small">Trusted ledger. Add R50 voucher fee via 1Voucher to activate referral bonus + bidding.</p>
+    <input id="voucherAmount" type="number" value="50" placeholder="Amount R50+ voucher"><input id="voucherPin" placeholder="1Voucher PIN 16 digits *"><input id="voucherName" placeholder="Name + Last 4 PIN *">
+    <button id="addVoucherBtn" style="background:#22dd55;color:#000">💳 Add R50 Voucher Fee - Triggers R5-R20 + Level-Up</button>
+    <div style="margin-top:12px"><input id="withdrawAmount" type="number" value="100" placeholder="Withdraw Min R100"><input id="withdrawBank" placeholder="Bank e.g. Capitec"><input id="withdrawAcc" placeholder="Account Number">
+    <button id="withdrawBtn" style="background:#ff4949">💸 Withdraw - R500/m Limit Fee R10</button></div>
+    <div id="wallet" class="list" style="margin-top:10px">Sign in to view your records.</div>
+    </div>
   </section>
-  <section class="card"><h2>Security notes</h2><ul class="small"><li>Never put a database password, service-role key, or secret key in this website.</li><li>Run the SQL in <code>supabase/schema.sql</code> before testing.</li><li>Set an admin role only through trusted Supabase tooling/server-side code, never from a user-editable profile field.</li><li>If listings involve alcohol or other regulated goods, confirm local legal requirements and age-verification obligations before launch.</li></ul></section>
+  <section class="card"><h2>Security notes</h2><ul class="small"><li>Never put a database password, service-role key, or secret key in this website - Only publishable key.</li><li>SQL in supabase/schema.sql must be run before testing.</li><li>R50 voucher service fee via 1Voucher (Shoprite/Boxer) only method that triggers referral bonus R5-R20 + Level-Up Notify.</li><li>Withdraw limit R500/month enforced in database function.</li><li>Daily streak: Refer 1 per day for 7 days get R50 bonus - Resets after claim.</li></ul></section>
 </main>
-<footer>PHUZA AUCTION · Shared database starter · No real-money payments</footer>
+<footer>PHUZA AUCTION · Supabase Connected · 5 Levels R5-R20 · R50 Voucher Fee · R500/m Withdraw · Weekly Bottle · Level-Up Notify 51/101/201/501</footer>
 <script type="module" src="./app.js"></script>
 </body></html>
