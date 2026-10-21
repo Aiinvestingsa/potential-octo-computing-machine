@@ -1,408 +1,81 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PHUZA AUCTION - Proxy Auto-Bid</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090909">
+<title>PHUZA AUCTION | Shared Auctions</title>
 <style>
-body{background:#0a0a0a;color:#fff;font-family:Arial;margin:0;padding:0 14px 140px}
-.header{background:linear-gradient(90deg,#000,#1a0000);padding:14px;display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #ff6b00;position:sticky;top:0;z-index:20}
-.logo{color:#ff6b00;font-weight:900;font-size:20px}
-.card{background:#151515;border-radius:14px;padding:14px;margin:12px 0;border:1px solid #2a2a2a}
-.btn{background:#ff6b00;color:#fff;border:0;padding:14px;border-radius:10px;font-weight:900;width:100%;cursor:pointer;margin-top:8px}
-.btn2{background:#222;color:#fff;border:1px solid #444;padding:12px;border-radius:10px;font-weight:700;width:100%;cursor:pointer;margin-top:8px}
-.flash{border:2px solid #f00 !important;background:linear-gradient(135deg,#2a0000,#151515) !important;animation:flashBorder 1s infinite}
-.extended{border:2px solid #0f0 !important;background:linear-gradient(135deg,#002a00,#151515) !important}
-@keyframes flashBorder{0%,100%{border-color:#f00}50%{border-color:#ff0}}
-.portal{border-radius:16px;padding:20px;margin:12px 0;text-align:center;cursor:pointer}
-.portalBuyer{border:3px solid #ff6b00;background:linear-gradient(135deg,#151515,#2a1500)}
-.portalSeller{border:3px solid #00ffff;background:linear-gradient(135deg,#151515,#001a1a)}
-.portalAdmin{background:#111;border:1px dashed #444}
-input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#000;color:#fff;margin:6px 0;box-sizing:border-box}
-textarea{min-height:60px}
-.small{font-size:12px;color:#999}
-#buyerArea,#sellerArea,#adminArea,#verifySection,#walletLock{display:none}
-.bottle-img{width:100%;height:180px;object-fit:cover;border-radius:10px;background:#000;border:1px solid #333}
-.badge{background:#222;padding:4px 8px;border-radius:12px;font-size:11px}
-.badge-flash{background:#f00;color:#fff;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:900;animation:blink 0.5s infinite}
-.badge-proxy{background:#a0f;color:#fff;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:900}
-.badge-extend{background:#0f0;color:#000;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:900}
-.live-dot{width:8px;height:8px;background:#0f0;border-radius:50%;display:inline-block;animation:blink 1s infinite}@keyframes blink{50%{opacity:0}}
-.locked{background:#300;border:2px solid #f00;padding:12px;border-radius:10px;text-align:center}
-.preview-box{background:#000;border:2px dashed #555;border-radius:10px;padding:10px;text-align:center;margin:8px 0}
-.preview-box img{max-width:100%;max-height:200px;border-radius:8px}
-.countdown-flash{color:#f00;font-weight:900;font-size:16px;animation:blink 0.5s infinite}
-.countdown-extend{color:#0f0;font-weight:900;font-size:16px}
-.bid-history{background:#000;border-radius:10px;padding:10px;margin:10px 0;max-height:180px;overflow:auto;border:1px solid #333}
-.bid-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #222;font-size:12px}
-.bid-row.highest{background:#1a2a00;border:1px solid #0f0;border-radius:6px;padding:6px}
-.bid-row.proxy{background:#1a0033;border:1px solid #a0f;border-radius:6px;padding:6px}
-.bid-input-group{display:flex;gap:8px;margin:8px 0}
-.bid-input-group input{flex:1}
-.home-live{background:linear-gradient(135deg,#1a0000,#000);border:2px solid #ff6b00;border-radius:16px;padding:14px;margin:12px 0}
-.proxy-box{background:#1a0033;border:2px solid #a0f;border-radius:10px;padding:10px;margin:8px 0}
+:root{--bg:#090909;--panel:#151515;--line:#303030;--orange:#ff6b00;--gold:#ffcc00;--muted:#aaa;--green:#22dd55;--red:#ff4949}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#fff;font:15px/1.45 Arial,sans-serif;padding-bottom:35px}
+header{position:sticky;top:0;z-index:5;background:linear-gradient(90deg,#000,#200900);border-bottom:3px solid var(--orange);padding:13px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-size:20px;font-weight:900;color:var(--orange)}main{max-width:1000px;margin:auto;padding:14px}
+.hero,.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin:12px 0}
+.hero{text-align:center;background:radial-gradient(ellipse at top,#321300,#111 70%);border-color:#5b2800;padding:24px}
+h1{font-size:clamp(24px,5vw,38px);color:var(--orange);margin:6px 0}h2{font-size:20px;margin:0 0 12px}h3{margin:0 0 8px}
+.muted,.small{color:var(--muted)}.small{font-size:12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+input,button,textarea{font:inherit}input,textarea{width:100%;padding:11px;margin:5px 0;background:#050505;color:white;border:1px solid #444;border-radius:8px}
+button{cursor:pointer;border:0;border-radius:8px;padding:10px 13px;font-weight:800;background:var(--orange);color:white;margin:3px 2px}
+button.secondary{background:#292929;border:1px solid #444}button.gold{background:var(--gold);color:#171000}button:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:8px;align-items:center}.row>*{flex:1;min-width:0}.between{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.notice{padding:11px;border-radius:9px;background:#201800;border:1px solid #594100;color:#ffdf79;margin:10px 0;font-size:13px}
+.error{color:#ff9292}.success{color:#85ff9a}.auction{border:1px solid #333;background:#0d0d0d;border-radius:12px;padding:12px;margin:8px 0}
+.auction h3{color:#ffb16e}.tag{font-size:11px;border-radius:20px;padding:4px 8px;background:#382000;color:#ffc58b}
+.list{font-size:13px}.list div{padding:8px 0;border-bottom:1px solid #292929;overflow-wrap:anywhere}
+.hidden{display:none!important}footer{color:#888;text-align:center;font-size:12px;padding:20px}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.row.mobile{flex-direction:column;align-items:stretch}.brand{font-size:17px}main{padding:9px}}
 </style>
 </head>
 <body>
-<div class="header"><div class="logo">🍻 PHUZA AUCTION 🤖</div><div style="font-size:11px">Live <span id="liveCount">0</span> • R<span id="hBal">0</span></div></div>
-
-<div id="landing">
-<h1 style="text-align:center;color:#ff6b00;margin:10px 0">🍻 PHUZA AUCTION 🍻</h1>
-<p style="text-align:center;color:#fff;font-weight:900">Proxy Auto-Bid - Set max & system bids for you!</p>
-<div class="home-live">
-<h2 style="color:#ff6b00;margin:5px 0">🔥 LIVE NOW - Proxy Auto-Bid Enabled!</h2>
-<p class="small" style="color:#fff">Manual bid + Proxy: Set max R1000, system auto-bids when outbid!</p>
-<div id="homeLiveList"></div>
-<div style="background:#000;padding:10px;border-radius:10px;margin-top:10px;text-align:center;border:1px solid #ff6b00">
-<p style="color:#a0f;font-weight:900;margin:5px 0">🤖 Proxy: Set max R1000 → System auto-bids R460, R470... until R1000!</p>
-<button class="btn" onclick="openPortal('buyer')">🛒 JOIN PHUZA & SET PROXY BID →</button>
-</div>
-</div>
-<div style="display:flex;gap:8px;margin:12px 0">
-<div class="card" style="flex:1;text-align:center;border:1px solid #ff6b00"><b style="color:#ff6b00;font-size:20px" id="statLive">0</b><br><span class="small">Live</span></div>
-<div class="card" style="flex:1;text-align:center;border:1px solid #a0f"><b style="color:#a0f;font-size:20px" id="statProxy">0</b><br><span class="small">Proxy 🤖</span></div>
-<div class="card" style="flex:1;text-align:center;border:1px solid #0f0"><b style="color:#0f0;font-size:20px" id="statBids">0</b><br><span class="small">Bids</span></div>
-</div>
-<div class="portal portalBuyer" onclick="openPortal('buyer')"><div style="font-size:40px">🛒🤖</div><h2 style="color:#ff6b00">BUYER - Proxy Auto-Bid</h2><p class="small">Manual + Proxy + History + Auto-Extend</p><button class="btn">Enter Buyer →</button></div>
-<div class="portal portalSeller" onclick="openPortal('seller')"><div style="font-size:40px">🏪🍾</div><h2 style="color:#00ffff">SELLER</h2><button class="btn" style="background:#00ffff;color:#000">Enter Seller →</button></div>
-<div class="portal portalAdmin" onclick="openPortal('admin')"><h3>🔐 ADMIN</h3><button class="btn2">Admin Login</button></div>
-</div>
-
-<!-- BUYER -->
-<div id="buyerArea">
-<button class="btn2" onclick="goHome()" style="width:auto">← Back to Phuza Home</button>
-<h2 style="color:#ff6b00">🛒 PHUZA BUYER - Proxy Auto-Bid</h2>
-<div id="buyerAuth">
-<div class="card" id="buyerRegCard" style="border:2px solid #ff6b00"><h3>Join Phuza - Proxy Enabled</h3><input id="bRegName" placeholder="Full Name *"><input id="bRegWA" placeholder="WhatsApp *"><input id="bRegPass" type="password" placeholder="Password *"><button class="btn" onclick="buyerRegister()">Join Phuza</button><p class="small" style="text-align:center"><a href="#" onclick="showBuyerLogin()" style="color:#ff6b00">Already? Login</a></p><p id="bRegMsg" class="small"></p></div>
-<div class="card" id="buyerLoginCard" style="display:none;border:2px solid #ff6b00"><h3>Phuza Login</h3><input id="bLogWA" placeholder="WhatsApp"><input id="bLogPass" type="password" placeholder="Password"><button class="btn" onclick="buyerLogin()">Login</button><p class="small" style="text-align:center"><a href="#" onclick="showBuyerReg()" style="color:#ff6b00">New? Join</a></p><p id="bLogMsg" class="small"></p></div>
-<div class="card" id="buyerProfileCard" style="display:none;border:1px solid #0f0"><b>🍻 <span id="bProfName"></span></b> • <span id="bProfWA"></span> • <a href="#" onclick="buyerLogout()" style="color:#999">Logout</a> • <a href="#" onclick="goHome()" style="color:#ff6b00">Home</a></div>
-</div>
-<div id="walletLock" class="locked"><h3 style="color:#ff6b6b">🔒 R50 DEPOSIT REQUIRED</h3><p>Balance R<span id="lockBal">0.00</span></p><div style="background:#000;padding:12px;border-radius:10px;text-align:left"><input id="depAmount" type="number" value="50"><input id="depPin" placeholder="1Voucher PIN *"><input id="depRef" placeholder="Your Name *"><button class="btn" style="background:#0f0;color:#000" onclick="requestDeposit()">📤 Request Credit + WhatsApp Admin</button><p id="depMsg" class="small"></p></div><div id="pendingDepList" class="small" style="background:#000;padding:8px;border-radius:8px;margin-top:8px"></div></div>
-<div id="verifySection" class="card" style="border:3px solid #f00;background:#200"><h3 style="color:#ff6b6b">🚨 PHUZA WINNER - Verify ID!</h3><p>Won <b id="vBottle"></b> for R<b id="vPrice"></b></p><input id="vID" placeholder="SA ID 13 digits *" maxlength="13" oninput="checkAge(this.value)"><span id="vAgeCheck" class="small"></span><input id="vAddress" placeholder="Delivery Address *"><div style="display:flex;gap:8px;margin-top:8px"><input type="checkbox" id="vAgree" style="width:auto"><span class="small">I am 18+ *</span></div><button class="btn" style="background:#0f0" onclick="submitVerification()">✅ Verify & Pay</button><button class="btn2" onclick="cancelWin()">❌ Cancel</button><p id="vMsg" class="small"></p></div>
-<div id="buyerBidding"><div class="card" style="border:2px solid #ff6b00"><h3>💳 Phuza Wallet</h3><div style="background:#000;padding:12px;border-radius:12px;text-align:center">R<b id="balance" style="font-size:26px;color:#ff6b00">0.00</b><div id="debtBox" style="display:none;background:#300;padding:10px;border-radius:8px;margin-top:8px;border:1px solid #f00">Pay R<span id="debt"></span> for <span id="debtBottle"></span><br>⏰ <b id="timer">23:59:59</b><br><button class="btn" style="background:#0f0;padding:8px" onclick="payDebt()">Pay</button></div><div class="small">Strikes <span id="strikeInfo">0/3</span> • <span id="verifiedStatus">❌</span> • Proxy ON 🤖</div></div><div id="txList" class="small" style="background:#000;padding:8px;border-radius:8px;margin-top:8px;max-height:100px;overflow:auto"></div></div><h3>🔥 Live - Manual + Proxy + History</h3><div id="liveList"></div></div>
-</div>
-
-<!-- SELLER -->
-<div id="sellerArea">
-<button class="btn2" onclick="goHome()" style="width:auto">← Back to Phuza Home</button>
-<h2 style="color:#00ffff">🏪 PHUZA SELLER</h2>
-<div id="sellerAuth">
-<div class="card" id="sellerRegCard" style="border:2px solid #00ffff"><h3>Company Register</h3><input id="sRegName" placeholder="Company Name *"><input id="sRegNo" placeholder="Reg No *"><input id="sRegLicense" placeholder="Liquor License *"><input id="sRegOwner" placeholder="Owner Name *"><input id="sRegWA" placeholder="Company WhatsApp *"><input id="sRegAddr" placeholder="Shop Address *"><input id="sRegPass" type="password" placeholder="Password *"><button class="btn" style="background:#00ffff;color:#000" onclick="sellerRegister()">Join Phuza Sellers</button><p id="sRegMsg" class="small"></p><p class="small" style="text-align:center"><a href="#" onclick="showSellerLogin()" style="color:#00ffff">Login</a></p></div>
-<div class="card" id="sellerLoginCard" style="display:none"><h3>Seller Login</h3><input id="sLogWA" placeholder="Company WhatsApp"><input id="sLogPass" type="password" placeholder="Password"><button class="btn" style="background:#00ffff;color:#000" onclick="sellerLogin()">Login</button><p class="small" style="text-align:center"><a href="#" onclick="showSellerReg()" style="color:#00ffff">Register Company</a></p><p id="sLogMsg" class="small"></p></div>
-<div class="card" id="sellerProfileCard" style="display:none;border:1px solid #00ffff"><b>🏪 <span id="sProfName"></span></b> - <span id="sProfStatus"></span><br><span class="small" id="sProfLicense"></span> • <a href="#" onclick="sellerLogout()" style="color:#999">Logout</a></div>
-</div>
-<div id="sellerDash" style="display:none">
-<div class="card" style="border:2px solid #00ffff;background:#001a1a"><h3>➕ Post Bottle - Proxy Auto-Bid for Buyers!</h3><input id="bName" placeholder="Alcohol Name *"><div style="display:flex;gap:8px"><input id="bPrice" type="number" placeholder="Start Price R *" style="flex:1"><input id="bStock" type="number" placeholder="Stock *" style="flex:1"></div><select id="bCategory"><option value="Whiskey">🥃 Whiskey</option><option value="Brandy">🍷 Brandy</option><option value="Gin">🍸 Gin</option><option value="Vodka">🍶 Vodka</option><option value="Beer">🍺 Beer</option><option value="Wine">🍷 Wine</option><option value="Champagne">🍾 Champagne</option><option value="Other">Other</option></select><textarea id="bDesc" placeholder="Description *"></textarea><input id="bLocation" placeholder="Location *"><label style="color:#00ffff;font-size:12px;font-weight:900">📸 Upload Photo *</label><input id="bPhoto" type="file" accept="image/*" onchange="previewPhoto(this)"><div id="photoPreview" class="preview-box" style="display:none"><img id="previewImg"><p class="small" id="photoName"></p><button class="btn2" style="padding:6px;font-size:11px" onclick="clearPhoto()">❌ Remove</button></div><div style="background:#000;padding:10px;border-radius:10px;border:2px solid #f00;margin:10px 0"><label style="color:#f00;font-size:13px;font-weight:900">⚡ Flash Duration + Auto-Extend *</label><select id="bDuration" style="border:2px solid #f00;font-weight:900"><optgroup label="⚡ FLASH"><option value="2">⚡ 2 Mins</option><option value="5">⚡ 5 Mins</option><option value="10">⚡ 10 Mins</option><option value="15">⚡ 15 Mins</option><option value="30">⚡ 30 Mins</option></optgroup><optgroup label="🕐 NORMAL"><option value="60">1 Hour</option><option value="360">6 Hours</option><option value="720">12 Hours</option><option value="1440" selected>24 Hours</option><option value="4320">3 Days</option><option value="10080">7 Days</option></optgroup></select></div><select id="bAuth"><option value="94">AI 94% Authentic</option><option value="99">99% With Receipt</option><option value="80">80% No receipt</option></select><button class="btn" style="background:#00ffff;color:#000" onclick="postBottle()">📤 Post Phuza Bottle - Proxy Enabled</button><p id="bMsg" class="small"></p></div><div class="card"><h3>📦 My Bottles + Proxy Bids</h3><div id="myBottles"></div></div>
-</div>
-</div>
-
-<!-- ADMIN -->
-<div id="adminArea">
-<button class="btn2" onclick="goHome()" style="width:auto">← Back to Phuza Home</button>
-<h2 style="color:#ff6b6b">🔐 PHUZA ADMIN</h2>
-<div class="card" style="border:2px solid #f00"><h3>Admin Login</h3><input id="adminPass" type="password" placeholder="phuza123"><button class="btn" style="background:#f00;color:#fff" onclick="adminLogin()">Unlock</button></div>
-<div id="adminContent" style="display:none">
-<div class="card" style="border:2px solid #0f0"><h3>💰 Deposits</h3><div id="pendingDeposits"></div></div>
-<div class="card" style="border:2px solid #00ffff"><h3>🏪 Sellers</h3><div id="pendingCompanies"></div></div>
-<div class="card" style="border:2px solid #ff6b00"><h3>🍾 Bottles + Proxy + History</h3><div id="pendingBottles"></div></div>
-<div class="card"><h3>👥 Verifications</h3><div id="pendingVerifs"></div></div>
-<div class="card"><h3>📊 Stats</h3><div id="adminStats" class="small"></div></div>
-</div>
-</div>
-
-<script>
-const ADMIN_WA = "27789313670";
-let wallet=JSON.parse(localStorage.getItem('phuza_wallet')||'{"balance":0,"debt":0,"debtBottle":"","debtPrice":0,"debtExpiry":0,"tx":[]}');
-let strikes=JSON.parse(localStorage.getItem('phuza_strikes')||'{"count":0,"fine":0}');
-let companies=JSON.parse(localStorage.getItem('phuza_companies')||'{}');
-let bottles=JSON.parse(localStorage.getItem('phuza_bottles')||'[]');
-let verifs=JSON.parse(localStorage.getItem('phuza_verifs')||'{}');
-let deposits=JSON.parse(localStorage.getItem('phuza_deposits')||'[]');
-let tempPhotoBase64 = null;
-if(bottles.length==0){
-let img="https://images.unsplash.com/photo-1527281400683-1aae777175f8?w=400";
-bottles=[
-{id:1,name:"⚡ FLASH - Jameson 750ml",price:350,currentPrice:420,company:"Sipho's Cellar",companyWA:"27820000001",auth:"94",approved:true,live:true,ends:Date.now()+5*60*1000,stock:12,category:"Whiskey",desc:"Flash + Manual + Proxy Auto-Bid!",location:"Durban North",photo:img,duration:5,isFlash:true,extends:0,originalEnds:Date.now()+5*60*1000,watchers:23,bids:4,bidHistory:[{wa:"27820001111",name:"Thabo M.",amount:360,time:"10:15:22",outbid:true,type:"manual"},{wa:"27820002222",name:"Sipho D.",amount:380,time:"10:16:05",outbid:true,type:"manual"},{wa:"27820003333",name:"Lindiwe K.",amount:400,time:"10:16:45",outbid:true,type:"proxy",proxyMax:1000},{wa:"27820004444",name:"You",amount:420,time:"10:17:10",outbid:false,type:"manual"}],proxyBids:[{wa:"27820003333",name:"Lindiwe K.",maxAmount:1000,current:400}]},
-{id:2,name:"Bells 1L - 24h Auction",price:790,currentPrice:850,company:"Durban Liquor Hub",companyWA:"27820000002",auth:"99",approved:true,live:true,ends:Date.now()+45*60*1000,stock:6,category:"Whiskey",desc:"24h + Proxy",location:"Berea",photo:img,duration:1440,isFlash:false,extends:0,originalEnds:Date.now()+45*60*1000,watchers:15,bids:3,bidHistory:[{wa:"27820005555",name:"Bongani P.",amount:800,time:"09:30:12",outbid:true,type:"manual"},{wa:"27820006666",name:"Nomsa Z.",amount:830,time:"09:45:33",outbid:true,type:"manual"},{wa:"27820004444",name:"You",amount:850,time:"10:05:22",outbid:false,type:"manual"}],proxyBids:[]}
-];
-}
-function save(){localStorage.setItem('phuza_wallet',JSON.stringify(wallet));localStorage.setItem('phuza_strikes',JSON.stringify(strikes));localStorage.setItem('phuza_companies',JSON.stringify(companies));localStorage.setItem('phuza_bottles',JSON.stringify(bottles));localStorage.setItem('phuza_verifs',JSON.stringify(verifs));localStorage.setItem('phuza_deposits',JSON.stringify(deposits));}
-function sendWAAlert(m){let u=`https://wa.me/${ADMIN_WA}?text=${encodeURIComponent(m)}`;window.open(u,'_blank');}
-function goHome(){['buyerArea','sellerArea','adminArea'].forEach(id=>document.getElementById(id).style.display='none');document.getElementById('landing').style.display='block';renderHomeLive();window.scrollTo(0,0);}
-function openPortal(p){document.getElementById('landing').style.display='none';if(p=='buyer'){document.getElementById('buyerArea').style.display='block';let wa=localStorage.getItem('phuza_current_user');if(wa){showBuyerProfile();checkWalletLock();}}else if(p=='seller'){document.getElementById('sellerArea').style.display='block';let wa=localStorage.getItem('phuza_current_company');if(wa)showSellerDash();}else if(p=='admin'){document.getElementById('adminArea').style.display='block';}}
-function checkWalletLock(){let wa=localStorage.getItem('phuza_current_user');if(!wa)return;let bal=wallet.balance;document.getElementById('lockBal').innerText=bal.toFixed(2);document.getElementById('hBal').innerText=bal.toFixed(0);if(bal<50){document.getElementById('walletLock').style.display='block';document.getElementById('buyerBidding').style.display='none';document.getElementById('verifySection').style.display='none';renderPendingDepForUser();}else{document.getElementById('walletLock').style.display='none';document.getElementById('buyerBidding').style.display='block';if(wallet.debt>0&&!verifs[wa+'_verified']){document.getElementById('verifySection').style.display='block';document.getElementById('vBottle').innerText=wallet.debtBottle;document.getElementById('vPrice').innerText=wallet.debtPrice;}renderLive();}renderWallet();}
-function renderBidHistory(bottle){
-let hist=bottle.bidHistory||[];
-if(hist.length==0)return '<div class="small">No bids yet - Be first! Manual or Proxy!</div>';
-let sorted=[...hist].sort((a,b)=>b.amount-a.amount);
-let proxyInfo=bottle.proxyBids&&bottle.proxyBids.length?`<div class="small" style="color:#a0f">🤖 ${bottle.proxyBids.length} Proxy Auto-Bids active - Max up to R${Math.max(...bottle.proxyBids.map(p=>p.maxAmount))}</div>`:'';
-return `<div class="bid-history"><div style="font-weight:900;color:#ff6b00;font-size:12px;margin-bottom:6px">📜 Bid History - ${hist.length} bids - Current: R${bottle.currentPrice||bottle.price} ${proxyInfo}</div>`+sorted.map((h,i)=>{
-let isHighest=i==0;
-let isYou=h.wa==localStorage.getItem('phuza_current_user')||h.name=='You';
-let typeBadge=h.type=='proxy'?'<span class="badge-proxy">🤖 PROXY</span>':'<span class="badge">Manual</span>';
-return `<div class="bid-row ${isHighest?'highest':''} ${h.type=='proxy'?'proxy':''}"><span>${isHighest?'🏆 ':''}${h.name} ${isYou?'(You)':''} ${typeBadge} ${h.outbid?'<span style="color:#f00">OUTBID</span>':''} ${h.proxyMax?' Max R'+h.proxyMax:''}</span><span><b style="color:${isHighest?'#0f0':'#fff'}">R${h.amount}</b> <span class="small">${h.time}</span></span></div>`;
-}).join('')+'</div>';
-}
-function renderHomeLive(){
-let div=document.getElementById('homeLiveList');
-let live=bottles.filter(b=>b.approved);
-document.getElementById('liveCount').innerText=live.length;
-document.getElementById('statLive').innerText=live.length;
-document.getElementById('statProxy').innerText=live.reduce((s,b)=>s+(b.proxyBids||[]).length,0);
-document.getElementById('statBids').innerText=live.reduce((s,b)=>s+(b.bidHistory||[]).length,0);
-if(live.length==0){div.innerHTML='<p class="small">No live bottles</p>';return;}
-div.innerHTML=live.slice(0,6).map(b=>{
-let isFlash=b.isFlash||b.duration<=30;
-let isExtended=(b.extends||0)>0;
-let timeLeft=b.ends-Date.now();
-let curPrice=b.currentPrice||b.price;
-let hasProxy=(b.proxyBids||[]).length>0;
-return `<div class="${isExtended?'card extended':isFlash?'card flash':'card'}" style="padding:0;overflow:hidden;margin:8px 0;border-left:4px solid ${isExtended?'#0f0':isFlash?'#f00':'#ff6b00'}">
-<img src="${b.photo}" class="bottle-img" style="height:140px" onerror="this.src='https://images.unsplash.com/photo-1527281400683-1aae777175f8?w=400'">
-<div style="padding:10px">
-<div style="display:flex;justify-content:space-between"><b>🍻 ${b.name}</b><b style="color:#ff6b00">R${curPrice}</b></div>
-<div style="display:flex;gap:6px;margin:4px 0"><span class="${isFlash?'badge-flash':'badge'}">${isFlash?'⚡ FLASH '+b.duration+'m':'⏰ '+ (b.duration>=60?Math.floor(b.duration/60)+'h':b.duration+'m')}</span>${hasProxy?'<span class="badge-proxy">🤖 PROXY x'+b.proxyBids.length+'</span>':''}${isExtended?'<span class="badge-extend">⏰ EXT x'+b.extends+'</span>':''}</div>
-${renderBidHistory(b)}
-<div style="display:flex;justify-content:space-between;align-items:center">
-<span class="small">⏰ <span class="${isExtended?'countdown-extend':isFlash?'countdown-flash':''} timerLiveHome" data-ends="${b.ends}" data-flash="${isFlash}" data-extends="${b.extends||0}">${Math.floor(timeLeft/60000)}m ${Math.floor((timeLeft%60000)/1000)}s</span></span><span class="small">👀 ${b.watchers||5} • 🔨 ${b.bids||0} bids</span>
-</div>
-<div class="bid-input-group"><input type="number" placeholder="Min R${curPrice+10}" id="homeBid_${b.id}"><button class="btn2" onclick="quickJoinBid(${b.id})" style="background:#ff6b00;color:#fff">Bid</button></div>
-<button class="btn" onclick="openPortal('buyer')" style="margin-top:4px;background:${isFlash?'#f00':'#ff6b00'};padding:10px;font-size:12px">🔒 JOIN PHUZA FOR PROXY BID →</button>
-</div></div>`;
-}).join('');
-}
-function renderLive(){
-let div=document.getElementById('liveList');
-let live=bottles.filter(b=>b.approved);
-div.innerHTML=live.map(b=>{
-let isFlash=b.isFlash||b.duration<=30;
-let isExtended=(b.extends||0)>0;
-let timeLeft=b.ends-Date.now();
-let curPrice=b.currentPrice||b.price;
-let minBid=curPrice+10;
-let hasProxy=(b.proxyBids||[]).length>0;
-let myProxy=(b.proxyBids||[]).find(p=>p.wa==localStorage.getItem('phuza_current_user'));
-return `<div class="${isExtended?'card extended':isFlash?'card flash':'card'}" style="padding:0;overflow:hidden;border-left:4px solid ${isExtended?'#0f0':isFlash?'#f00':'#ff6b00'}">
-<img src="${b.photo}" class="bottle-img" onerror="this.src='https://images.unsplash.com/photo-1527281400683-1aae777175f8?w=400'">
-<div style="padding:12px">
-<b>🍻 ${b.name}</b> - <b style="color:#ff6b00">Current: R${curPrice}</b> <span class="small" style="text-decoration:line-through">Start R${b.price}</span> ${hasProxy?'<span class="badge-proxy">🤖 PROXY x'+b.proxyBids.length+'</span>':''}<br>
-<div style="display:flex;gap:6px;margin:4px 0"><span class="${isFlash?'badge-flash':'badge'}">${isFlash?'⚡ FLASH '+b.duration+'m':'⏰ '+ (b.duration>=60?Math.floor(b.duration/60)+'h':b.duration+'m')}</span>${isExtended?'<span class="badge-extend">⏰ EXT x'+b.extends+'</span>':''}<span class="badge">${b.category}</span></div>
-<span class="small">${b.desc||''}</span><br>
-${renderBidHistory(b)}
-${myProxy?`<div class="proxy-box"><span class="small" style="color:#a0f">🤖 YOUR PROXY ACTIVE: Max R${myProxy.maxAmount} - Current R${myProxy.current} - Will auto-bid up to R${myProxy.maxAmount}!</span></div>`:''}
-<span class="small">⏰ Ends: <span class="${isExtended?'countdown-extend':isFlash?'countdown-flash':''} timerLive" data-ends="${b.ends}" data-flash="${isFlash}" data-extends="${b.extends||0}">${Math.floor(timeLeft/60000)}m ${Math.floor((timeLeft%60000)/1000)}s ${isExtended?'⏰ EXTENDED!':''}</span></span><br>
-<label class="small" style="color:#ff6b00;font-weight:900">💰 Manual Bid - Enter YOUR amount:</label>
-<div class="bid-input-group"><input type="number" id="bid_${b.id}" placeholder="Min R${minBid} - e.g. 500" value="${minBid}"><button class="btn" style="flex:0 0 100px;background:${isFlash?'#f00':isExtended?'#0f0':'#ff6b00'};color:${isExtended?'#000':'#fff'}" ${wallet.balance<50?'disabled':''} onclick="placeManualBid(${b.id})">${wallet.balance<50?'🔒 R50':'BID'}</button></div>
-<div style="display:flex;gap:6px"><button class="btn2" style="flex:1;padding:8px;font-size:11px" onclick="setBid(${b.id},${curPrice+50})">+R50</button><button class="btn2" style="flex:1;padding:8px;font-size:11px" onclick="setBid(${b.id},${curPrice+100})">+R100</button><button class="btn2" style="flex:1;padding:8px;font-size:11px" onclick="setBid(${b.id},${curPrice+200})">+R200</button></div>
-<div class="proxy-box">
-<label class="small" style="color:#a0f;font-weight:900">🤖 Proxy Auto-Bid - Set max & system bids for you!</label>
-<div class="bid-input-group"><input type="number" id="proxy_${b.id}" placeholder="Set MAX you willing to pay - e.g. 1000"><button class="btn2" style="flex:0 0 110px;background:#a0f;color:#fff" onclick="setProxyBid(${b.id})">🤖 Set Proxy</button></div>
-<p class="small" style="color:#ccc;margin:4px 0">💡 Example: Current R${curPrice}, you set proxy R1000 → If someone bids R450, system auto-bids R460 for you! You win without being online! Outbids show as 🤖 PROXY in history!</p>
-${myProxy?`<button class="btn2" style="background:#f00;color:#fff;padding:6px;font-size:11px" onclick="cancelProxy(${b.id})">❌ Cancel My Proxy R${myProxy.maxAmount}</button>`:''}
-</div>
-</div></div>`;
-}).join('')||'No live bottles';
-}
-function renderWallet(){document.getElementById('balance').innerText=wallet.balance.toFixed(2);document.getElementById('hBal').innerText=wallet.balance.toFixed(0);document.getElementById('txList').innerHTML=wallet.tx.slice(-6).reverse().map(t=>`${t.time} - ${t.desc}`).join('<br>')||'No activity';document.getElementById('strikeInfo').innerText=`${strikes.count}/3`;document.getElementById('verifiedStatus').innerHTML=verifs[localStorage.getItem('phuza_current_user')+'_verified']?'✅ Verified':'❌ Not verified';if(wallet.debt>0){document.getElementById('debtBox').style.display='block';document.getElementById('debt').innerText=wallet.debtPrice;document.getElementById('debtBottle').innerText=wallet.debtBottle;let left=wallet.debtExpiry-Date.now();if(left<=0){wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`❌ Failed pay - STRIKE`});strikes.count++;wallet.debt=0;save();}else{let h=Math.floor(left/3600000),m=Math.floor((left%3600000)/60000),s=Math.floor((left%60000)/1000);document.getElementById('timer').innerText=`${h}:${m}:${s}`;}}else{let db=document.getElementById('debtBox');if(db)db.style.display='none';}}
-setInterval(()=>{
-renderWallet();
-document.querySelectorAll('.timerLive, .timerLiveHome').forEach(el=>{
-let ends=parseInt(el.dataset.ends);let left=ends-Date.now();
-let isFlash=el.dataset.flash==='true';
-let ext=parseInt(el.dataset.extends||0);
-if(left<=0){el.innerText='⚠️ ENDED';el.style.color='#f00';}
-else{
-let m=Math.floor(left/60000);let s=Math.floor((left%60000)/1000);
-if(ext>0){el.innerHTML=`⏰ EXTENDED x${ext}! ${m}m ${s}s`;el.className=el.classList.contains('timerLiveHome')?'countdown-extend timerLiveHome':'countdown-extend timerLive';}
-else if(isFlash||m<5){el.innerText=`⚡ ${m}m ${s}s LEFT!`;el.className=el.classList.contains('timerLiveHome')?'countdown-flash timerLiveHome':'countdown-flash timerLive';}
-else{let h=Math.floor(left/3600000);let mm=Math.floor((left%3600000)/60000);el.innerText=`${h}h ${mm}m ${s}s`;el.className=el.classList.contains('timerLiveHome')?'timerLiveHome':'timerLive';}
-}
-});
-},1000);
-renderWallet();renderHomeLive();
-function setBid(id,amount){let input=document.getElementById(`bid_${id}`);if(input)input.value=amount;let homeInput=document.getElementById(`homeBid_${id}`);if(homeInput)homeInput.value=amount;}
-function quickJoinBid(id){alert('Join Phuza to bid! Proxy auto-bid will bid for you even when outbidded!');openPortal('buyer');}
-function buyerRegister(){let n=document.getElementById('bRegName').value.trim(),wa=document.getElementById('bRegWA').value.trim(),p=document.getElementById('bRegPass').value.trim();if(!n||!wa||!p)return alert('Fill all');localStorage.setItem('phuza_user_'+wa,JSON.stringify({name:n,whatsapp:wa,password:p}));localStorage.setItem('phuza_current_user',wa);document.getElementById('bRegMsg').innerHTML=`✅ Welcome ${n}! Set proxy bid now!`;setTimeout(()=>{showBuyerProfile();checkWalletLock();},800);}
-function buyerLogin(){let wa=document.getElementById('bLogWA').value.trim(),p=document.getElementById('bLogPass').value;let d=localStorage.getItem('phuza_user_'+wa);if(!d)return document.getElementById('bLogMsg').innerText='❌ Not Phuza buyer';let u=JSON.parse(d);if(u.password!==p)return document.getElementById('bLogMsg').innerText='❌ Wrong';localStorage.setItem('phuza_current_user',wa);showBuyerProfile();checkWalletLock();}
-function showBuyerProfile(){let wa=localStorage.getItem('phuza_current_user');let u=JSON.parse(localStorage.getItem('phuza_user_'+wa)||'{}');document.getElementById('buyerRegCard').style.display='none';document.getElementById('buyerLoginCard').style.display='none';document.getElementById('buyerProfileCard').style.display='block';document.getElementById('bProfName').innerText=u.name;document.getElementById('bProfWA').innerText=u.whatsapp;}
-function showBuyerLogin(){document.getElementById('buyerRegCard').style.display='none';document.getElementById('buyerLoginCard').style.display='block';}
-function showBuyerReg(){document.getElementById('buyerRegCard').style.display='block';document.getElementById('buyerLoginCard').style.display='none';}
-function buyerLogout(){localStorage.removeItem('phuza_current_user');location.reload();}
-function requestDeposit(){let wa=localStorage.getItem('phuza_current_user');let amt=parseFloat(document.getElementById('depAmount').value),pin=document.getElementById('depPin').value.trim(),ref=document.getElementById('depRef').value.trim();if(!amt||amt<50)return alert('Min R50');if(!pin||pin.length<8)return alert('Enter PIN');if(!ref)return alert('Enter ref');let dep={id:Date.now(),whatsapp:wa,amount:amt,pin:pin,ref:ref,status:'pending',time:new Date().toLocaleString()};deposits.push(dep);save();document.getElementById('depMsg').innerHTML=`✅ Request R${amt} sent!`;let msg=`🍻 PHUZA DEPOSIT R${amt} ${ref} ${wa} PIN ${pin}`;sendWAAlert(msg);renderPendingDepForUser();}
-function renderPendingDepForUser(){let wa=localStorage.getItem('phuza_current_user');let my=deposits.filter(d=>d.whatsapp==wa);document.getElementById('pendingDepList').innerHTML=my.length?'<b>Your Requests:</b><br>'+my.map(d=>`R${d.amount} - ${d.status} - ...${d.pin.slice(-4)}`).join('<br>'):'No requests';}
-function setProxyBid(bottleId){
-let wa=localStorage.getItem('phuza_current_user');
-if(!wa){alert('Join Phuza first');openPortal('buyer');return;}
-if(wallet.balance<50)return alert('Need R50 wallet');
-let bottle=bottles.find(b=>b.id==bottleId);
-if(!bottle)return alert('Bottle not found');
-let input=document.getElementById(`proxy_${bottleId}`);
-let maxAmount=parseFloat(input.value);
-let curPrice=bottle.currentPrice||bottle.price;
-if(!maxAmount||maxAmount<=curPrice)return alert(`❌ Proxy max must be higher than current R${curPrice}! Set e.g. R${curPrice+200}`);
-if(maxAmount>wallet.balance)return alert(`❌ Not enough balance! You have R${wallet.balance.toFixed(2)} but proxy max is R${maxAmount} - Need balance >= max!`);
-if(!bottle.proxyBids)bottle.proxyBids=[];
-// Remove existing proxy for this user
-bottle.proxyBids=bottle.proxyBids.filter(p=>p.wa!=wa);
-bottle.proxyBids.push({wa:wa,name:JSON.parse(localStorage.getItem('phuza_user_'+wa)||'{}').name||'You',maxAmount:maxAmount,current:curPrice});
-wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`🤖 Set Proxy Max R${maxAmount} on ${bottle.name} - Current R${curPrice}`});
-save();
-renderLive();
-renderHomeLive();
-alert(`🤖 Proxy Auto-Bid Set!\n\nBottle: ${bottle.name}\nCurrent: R${curPrice}\nYour Max: R${maxAmount}\n\nSystem will auto-bid for you when outbid!\nExample: If someone bids R${curPrice+20}, system bids R${curPrice+30} for you automatically!\nYou win without being online!\n\nCheck bid history for 🤖 PROXY bids!`);
-}
-function cancelProxy(bottleId){
-let wa=localStorage.getItem('phuza_current_user');
-let bottle=bottles.find(b=>b.id==bottleId);
-if(!bottle||!bottle.proxyBids)return;
-bottle.proxyBids=bottle.proxyBids.filter(p=>p.wa!=wa);
-wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`❌ Cancelled Proxy on ${bottle.name}`});
-save();
-renderLive();
-renderHomeLive();
-alert('❌ Proxy cancelled');
-}
-function placeManualBid(bottleId){
-let wa=localStorage.getItem('phuza_current_user');
-if(!wa){alert('Join Phuza first');openPortal('buyer');return;}
-if(wallet.balance<50)return alert('Need R50');
-let bottle=bottles.find(b=>b.id==bottleId);
-if(!bottle)return alert('Bottle not found');
-let input=document.getElementById(`bid_${bottleId}`);
-let bidAmount=parseFloat(input.value);
-let curPrice=bottle.currentPrice||bottle.price;
-let minBid=curPrice+10;
-if(!bidAmount||bidAmount<minBid)return alert(`❌ Min bid R${minBid} - Current R${curPrice}`);
-if(bidAmount>wallet.balance)return alert(`❌ Balance R${wallet.balance.toFixed(2)} < R${bidAmount}`);
-if(wallet.debt>0)return alert(`Pay for ${wallet.debtBottle} first`);
-// Auto-extend
-let timeLeft=bottle.ends-Date.now();
-let isFlash=bottle.isFlash||bottle.duration<=30;
-let extendThreshold=isFlash?60*1000:5*60*1000;
-let extendAmount=isFlash?2*60*1000:5*60*1000;
-let willExtend=false;
-if(timeLeft<=extendThreshold && timeLeft>0){
-bottle.ends+=extendAmount;
-bottle.extends=(bottle.extends||0)+1;
-willExtend=true;
-let msg=`⏰ PHUZA AUTO-EXTEND! ${bottle.name} +${isFlash?'2m':'5m'}! New end: ${new Date(bottle.ends).toLocaleTimeString()} Bid by ${wa} R${bidAmount} Extends: ${bottle.extends}`;
-sendWAAlert(msg);
-alert(`⏰ AUTO-EXTEND! +${isFlash?'2m':'5m'}!`);
-}
-// Mark previous as outbid
-if(bottle.bidHistory){bottle.bidHistory.forEach(h=>h.outbid=true);}
-let userData=JSON.parse(localStorage.getItem('phuza_user_'+wa)||'{}');
-let bidderName=userData.name||'You';
-if(!bottle.bidHistory)bottle.bidHistory=[];
-bottle.bidHistory.push({wa:wa,name:bidderName,amount:bidAmount,time:new Date().toLocaleTimeString(),outbid:false,type:"manual"});
-bottle.currentPrice=bidAmount;
-bottle.bids=(bottle.bids||0)+1;
-bottle.watchers=(bottle.watchers||0)+1;
-// CHECK PROXY BIDS - Auto-bid for others!
-let otherProxies=(bottle.proxyBids||[]).filter(p=>p.wa!=wa && p.maxAmount>bidAmount);
-if(otherProxies.length>0){
-let highestProxy=otherProxies.sort((a,b)=>b.maxAmount-a.maxAmount)[0];
-if(highestProxy.maxAmount>bidAmount){
-let autoBidAmount=Math.min(bidAmount+10,highestProxy.maxAmount);
-if(autoBidAmount>bidAmount && autoBidAmount<=highestProxy.maxAmount){
-// Auto-bid for proxy user
-bottle.bidHistory.forEach(h=>h.outbid=true);
-bottle.bidHistory.push({wa:highestProxy.wa,name:highestProxy.name,amount:autoBidAmount,time:new Date().toLocaleTimeString(),outbid:false,type:"proxy",proxyMax:highestProxy.maxAmount});
-bottle.currentPrice=autoBidAmount;
-bottle.bids++;
-highestProxy.current=autoBidAmount;
-wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`🤖 Proxy Auto-Bid: ${highestProxy.name} auto-bid R${autoBidAmount} (Max R${highestProxy.maxAmount}) - Outbid your R${bidAmount}`});
-save();
-renderLive();
-renderHomeLive();
-alert(`🤖 OUTBID BY PROXY! 🤖\n\nYou bid R${bidAmount}\n\nBut ${highestProxy.name} has Proxy Max R${highestProxy.maxAmount}\nSystem auto-bid R${autoBidAmount} for them!\n\nYour bid is now OUTBID but stays in history!\nSet your own Proxy Max higher than R${autoBidAmount} to auto-win!\n\nCurrent: R${autoBidAmount}`);
-return;
-}
-}
-}
-wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`🔨 Manual Bid R${bidAmount} on ${bottle.name}${willExtend?' ⏰ EXTENDED!':''}`});
-save();
-renderLive();
-renderHomeLive();
-renderAdmin();
-renderMyBottles();
-// Simulate other manual bidders
-setTimeout(()=>{
-if(Math.random()>0.6 && !willExtend){
-let fakeNames=["Thabo M.","Sipho D.","Lindiwe K.","Bongani P.","Nomsa Z."];
-let fakeName=fakeNames[Math.floor(Math.random()*fakeNames.length)];
-let outbidAmount=bidAmount+Math.floor(Math.random()*80)+20;
-// Check if any proxy can auto-outbid this fake bid
-let myProxy=(bottle.proxyBids||[]).find(p=>p.wa==wa);
-if(myProxy && myProxy.maxAmount>=outbidAmount){
-// Your proxy auto-bids!
-bottle.bidHistory.forEach(h=>h.outbid=true);
-bottle.bidHistory.push({wa:"fake_"+Date.now(),name:fakeName,amount:outbidAmount,time:new Date().toLocaleTimeString(),outbid:true,type:"manual"});
-bottle.bidHistory.push({wa:wa,name:bidderName,amount:outbidAmount+10,time:new Date().toLocaleTimeString(),outbid:false,type:"proxy",proxyMax:myProxy.maxAmount});
-bottle.currentPrice=outbidAmount+10;
-bottle.bids+=2;
-myProxy.current=outbidAmount+10;
-wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`🤖 YOUR PROXY Auto-Bid R${outbidAmount+10} (Max R${myProxy.maxAmount}) - Auto outbid ${fakeName} R${outbidAmount}!`});
-save();
-renderLive();
-renderHomeLive();
-alert(`🤖 YOUR PROXY WON! 🤖\n\n${fakeName} bid R${outbidAmount}\nBut YOUR Proxy Max R${myProxy.maxAmount} auto-bid R${outbidAmount+10} for you!\nYou are still winning without being online!\n\nProxy power!`);
-}else{
-bottle.bidHistory.forEach(h=>h.outbid=true);
-bottle.bidHistory.push({wa:"fake_"+Date.now(),name:fakeName,amount:outbidAmount,time:new Date().toLocaleTimeString(),outbid:false,type:"manual"});
-bottle.currentPrice=outbidAmount;
-bottle.bids++;
-save();
-renderLive();
-renderHomeLive();
-alert(`⚠️ OUTBID! You bid R${bidAmount} but ${fakeName} bid R${outbidAmount}! Your bid stays in history! Set Proxy Max R${outbidAmount+100} to auto-win!`);
-}
-}else if(!willExtend){
-wallet.debt=1;wallet.debtBottle=bottle.name;wallet.debtPrice=bidAmount;wallet.debtExpiry=Date.now()+24*3600000;
-wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`🏆 WON ${bottle.name} R${bidAmount} manual!`});save();
-document.getElementById('verifySection').style.display='block';document.getElementById('vBottle').innerText=bottle.name;document.getElementById('vPrice').innerText=bidAmount;
-let msg=`🏆 WINNER! ${wa} WON ${bottle.name} R${bidAmount} Manual Bids: ${bottle.bidHistory.length}`;sendWAAlert(msg);
-alert(`🏆 WON! Your manual bid R${bidAmount} WON ${bottle.name}! Total bids: ${bottle.bidHistory.length}`);
-}
-},1200);
-}
-function checkAge(id){let el=document.getElementById('vAgeCheck');if(id.length>=6){let y=parseInt(id.substring(0,2));let fy=y<25?2000+y:1900+y;let age=new Date().getFullYear()-fy;el.innerHTML=age>=18?`✅ Age ${age} OK`:`❌ Age ${age} Must 18+`;el.style.color=age>=18?'#0f0':'#f00';}}
-function submitVerification(){let wa=localStorage.getItem('phuza_current_user');let id=document.getElementById('vID').value.trim(),addr=document.getElementById('vAddress').value.trim(),agree=document.getElementById('vAgree').checked;if(!id||!addr)return alert('Fill ID+Address');if(id.length!=13)return alert('ID 13 digits');if(!agree)return alert('Agree');verifs[wa+'_verified']=true;verifs[wa+'_data']={id,address:addr,time:new Date().toLocaleString()};save();document.getElementById('vMsg').innerHTML='✅ Verified!';let msg=`✅ PHUZA ID VERIFIED! ${wa} ID ${id} ${addr} Bottle ${wallet.debtBottle}`;sendWAAlert(msg);setTimeout(()=>document.getElementById('verifySection').style.display='none',1000);}
-function cancelWin(){if(confirm('Cancel = Strike!')){strikes.count++;wallet.debt=0;wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`❌ Cancelled - Strike`});save();document.getElementById('verifySection').style.display='none';}}
-function payDebt(){if(!verifs[localStorage.getItem('phuza_current_user')+'_verified'])return alert('Verify ID first');if(wallet.balance<wallet.debtPrice)return alert('Need more balance');wallet.balance-=wallet.debtPrice;wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`✅ Paid R${wallet.debtPrice} for ${wallet.debtBottle}`});wallet.debt=0;wallet.debtBottle="";wallet.debtPrice=0;wallet.debtExpiry=0;save();renderWallet();alert('✅ Paid!');}
-function previewPhoto(input){if(input.files && input.files[0]){let file=input.files[0];if(file.size>2*1024*1024){alert('Max 2MB');return;}let r=new FileReader();r.onload=function(e){tempPhotoBase64=e.target.result;document.getElementById('photoPreview').style.display='block';document.getElementById('previewImg').src=tempPhotoBase64;document.getElementById('photoName').innerText=`✅ ${file.name} - ${(file.size/1024).toFixed(0)}KB`;};r.readAsDataURL(file);}}
-function clearPhoto(){tempPhotoBase64=null;document.getElementById('bPhoto').value='';document.getElementById('photoPreview').style.display='none';}
-function sellerRegister(){let n=document.getElementById('sRegName').value.trim(),r=document.getElementById('sRegNo').value.trim(),l=document.getElementById('sRegLicense').value.trim(),o=document.getElementById('sRegOwner').value.trim(),wa=document.getElementById('sRegWA').value.trim(),a=document.getElementById('sRegAddr').value.trim(),p=document.getElementById('sRegPass').value.trim();if(!n||!r||!l||!o||!wa||!a||!p)return alert('Fill all');companies[wa]={name:n,reg:r,license:l,owner:o,whatsapp:wa,address:a,password:p,status:'pending',joined:new Date().toLocaleString()};save();document.getElementById('sRegMsg').innerHTML='✅ Joined Phuza Sellers!';let msg=`🏪 PHUZA NEW SELLER! ${n} ${wa} License ${l}`;sendWAAlert(msg);}
-function sellerLogin(){let wa=document.getElementById('sLogWA').value.trim(),p=document.getElementById('sLogPass').value;let c=companies[wa];if(!c)return document.getElementById('sLogMsg').innerText='❌ Not Phuza seller';if(c.password!==p)return document.getElementById('sLogMsg').innerText='❌ Wrong';localStorage.setItem('phuza_current_company',wa);showSellerDash();}
-function showSellerDash(){let wa=localStorage.getItem('phuza_current_company');let c=companies[wa];if(!c)return;document.getElementById('sellerRegCard').style.display='none';document.getElementById('sellerLoginCard').style.display='none';document.getElementById('sellerProfileCard').style.display='block';document.getElementById('sellerDash').style.display='block';document.getElementById('sProfName').innerText=c.name;document.getElementById('sProfStatus').innerHTML=c.status=='approved'?'<span style="color:#0f0">✅ APPROVED</span>':c.status=='rejected'?'<span style="color:#f00">❌ REJECTED</span>':'<span style="color:#ff0">⏳ PENDING</span>';document.getElementById('sProfLicense').innerText=c.license;renderMyBottles();}
-function showSellerLogin(){document.getElementById('sellerRegCard').style.display='none';document.getElementById('sellerLoginCard').style.display='block';}
-function showSellerReg(){document.getElementById('sellerRegCard').style.display='block';document.getElementById('sellerLoginCard').style.display='none';}
-function sellerLogout(){localStorage.removeItem('phuza_current_company');location.reload();}
-function renderMyBottles(){let wa=localStorage.getItem('phuza_current_company');let my=bottles.filter(b=>b.companyWA==wa);document.getElementById('myBottles').innerHTML=my.map(b=>`<div style="background:#000;padding:10px;border-radius:10px;margin:8px 0;border:1px solid ${b.extends>0?'#0f0':b.approved?'#0f0':'#ff0'}"><img src="${b.photo}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;float:left;margin-right:10px"><b>${b.name}</b> Current R${b.currentPrice||b.price} Start R${b.price} ${b.isFlash?'<span style="color:#f00">⚡ FLASH</span>':''} ${b.extends>0?'<span style="color:#0f0">⏰ EXT x'+b.extends+'</span>':''} ${(b.proxyBids||[]).length?'<span style="color:#a0f">🤖 PROXY x'+b.proxyBids.length+'</span>':''}<br><span class="small">${b.category} • ${b.bids||0} bids • ${b.proxyBids?b.proxyBids.length:0} proxies</span><br>${renderBidHistory(b)}<span class="small">${b.approved?'✅ LIVE ON HOME!':'⏳ Pending'}</span><div style="clear:both"></div></div>`).join('')||'No bottles';}
-function postBottle(){
-let wa=localStorage.getItem('phuza_current_company');let c=companies[wa];if(!c)return alert('Login');if(c.status!=='approved')return alert('Not approved');
-let n=document.getElementById('bName').value.trim(),pr=parseFloat(document.getElementById('bPrice').value),st=parseInt(document.getElementById('bStock').value),cat=document.getElementById('bCategory').value,desc=document.getElementById('bDesc').value.trim(),loc=document.getElementById('bLocation').value.trim(),dur=parseInt(document.getElementById('bDuration').value),auth=document.getElementById('bAuth').value;
-if(!n||!pr||!st)return alert('Fill Name+Price+Stock');if(!tempPhotoBase64)return alert('Upload photo');if(!desc)return alert('Add description');if(!loc)return alert('Add location');
-let ends=Date.now()+dur*60*1000;let isFlash=dur<=30;
-let bottle={id:Date.now(),name:(isFlash?'⚡ FLASH - ':'')+n,price:pr,currentPrice:pr,stock:st,category:cat,desc:desc,location:loc,photo:tempPhotoBase64,duration:dur,auth:auth,company:c.name,companyWA:wa,approved:false,live:false,ends:ends,isFlash:isFlash,extends:0,originalEnds:ends,watchers:1,bids:0,bidHistory:[],proxyBids:[]};
-bottles.push(bottle);save();
-document.getElementById('bMsg').innerHTML=`✅ Phuza bottle posted! Manual + Proxy Auto-Bid enabled!`;
-let msg=`${isFlash?'⚡ PHUZA FLASH!':'🍾 PHUZA NEW!'} Seller ${c.name} Bottle ${n} R${pr} Manual + Proxy`;sendWAAlert(msg);
-clearPhoto();document.getElementById('bName').value='';document.getElementById('bPrice').value='';document.getElementById('bStock').value='';document.getElementById('bDesc').value='';renderMyBottles();renderHomeLive();
-}
-function adminLogin(){let p=document.getElementById('adminPass').value;if(p!=='phuza123'&&p!=='admin123'&&p!=='bid2024')return alert('Wrong - Try phuza123');document.getElementById('adminContent').style.display='block';renderAdmin();}
-function renderAdmin(){
-let pd=document.getElementById('pendingDeposits');pd.innerHTML=deposits.length?deposits.map(d=>`<div style="background:#000;padding:10px;border-radius:8px;margin:6px 0;border:2px solid ${d.status=='pending'?'#ff0':'#0f0'}"><b>R${d.amount} - ${d.whatsapp}</b> - ${d.ref}<br><span class="small">PIN: ${d.pin} - ${d.time} - ${d.status}</span><br>${d.status=='pending'?`<button class="btn" style="background:#0f0;padding:6px;width:48%;display:inline-block" onclick="approveDeposit(${d.id})">Approve</button> <button class="btn" style="background:#f00;color:#fff;padding:6px;width:48%;display:inline-block" onclick="rejectDeposit(${d.id})">Reject</button>`:''}</div>`).join(''):'No deposits';
-let pc=document.getElementById('pendingCompanies');pc.innerHTML=Object.values(companies).map(c=>`<div style="background:#000;padding:8px;border-radius:8px;margin:6px 0"><b>${c.name}</b> - ${c.license} - ${c.whatsapp} - ${c.status}<br>${c.status=='pending'?`<button class="btn" style="background:#0f0;padding:6px;width:48%;display:inline-block" onclick="approveCompany('${c.whatsapp}')">Approve</button> <button class="btn" style="background:#f00;color:#fff;padding:6px;width:48%;display:inline-block" onclick="rejectCompany('${c.whatsapp}')">Reject</button>`:''}</div>`).join('')||'No sellers';
-let pb=document.getElementById('pendingBottles');pb.innerHTML=bottles.map(b=>`<div style="background:#000;padding:10px;border-radius:8px;margin:6px 0;border:2px solid ${b.extends>0?'#0f0':b.isFlash?'#f00':b.approved?'#0f0':'#ff0'}"><img src="${b.photo}" style="width:50px;height:50px;object-fit:cover;border-radius:6px;float:left;margin-right:8px"><b>${b.name}</b> Current R${b.currentPrice||b.price} Start R${b.price} ${b.isFlash?'<span style="color:#f00">⚡ FLASH</span>':''} ${b.extends>0?'<span style="color:#0f0">⏰ EXT x'+b.extends+'</span>':''} ${(b.proxyBids||[]).length?'<span style="color:#a0f">🤖 PROXY x'+b.proxyBids.length+'</span>':''} • ${b.bids||0} bids<br><span class="small">${b.company} - Ends ${new Date(b.ends).toLocaleTimeString()} - ${b.approved?'✅ LIVE ON HOME!':'⏳ Pending'}</span><br>${renderBidHistory(b)}${!b.approved?`<button class="btn" style="background:#0f0;padding:6px;width:48%;display:inline-block" onclick="approveBottle(${b.id})">✅ Approve - Show on Home!</button> <button class="btn" style="background:#f00;color:#fff;padding:6px;width:48%;display:inline-block" onclick="rejectBottle(${b.id})">Reject</button>`:''}<div style="clear:both"></div></div>`).join('')||'No bottles';
-let pv=document.getElementById('pendingVerifs');pv.innerHTML=Object.keys(verifs).filter(k=>k.endsWith('_data')).map(k=>{let wa=k.replace('_data','');let d=verifs[k];return `<div style="background:#000;padding:8px;border-radius:8px;margin:6px 0"><b>Phuza Buyer ${wa}</b> - ID ${d.id} - ${d.address}</div>`}).join('')||'No verifications';
-document.getElementById('adminStats').innerHTML=`Buyers: ${Object.keys(localStorage).filter(k=>k.startsWith('phuza_user_')).length}<br>Sellers: ${Object.keys(companies).length}<br>Bottles: ${bottles.length} Live: ${bottles.filter(b=>b.approved).length} Total Bids: ${bottles.reduce((s,b)=>s+(b.bidHistory||[]).length,0)} Proxy Bids: ${bottles.reduce((s,b)=>s+(b.proxyBids||[]).length,0)}<br>Deposits: ${deposits.length} Pending: ${deposits.filter(d=>d.status=='pending').length}`;
-}
-function approveDeposit(id){let d=deposits.find(x=>x.id==id);if(!d)return;d.status='approved';wallet.balance+=d.amount;wallet.tx.push({time:new Date().toLocaleTimeString(),desc:`✅ Approved R${d.amount}`});save();renderAdmin();renderHomeLive();alert(`✅ Approved R${d.amount} for ${d.whatsapp}`);}
-function rejectDeposit(id){deposits=deposits.filter(x=>x.id!=id);save();renderAdmin();}
-function approveCompany(wa){companies[wa].status='approved';save();renderAdmin();renderHomeLive();}
-function rejectCompany(wa){companies[wa].status='rejected';save();renderAdmin();}
-function approveBottle(id){let b=bottles.find(x=>x.id==id);if(b){b.approved=true;b.live=true;if(!b.originalEnds)b.originalEnds=b.ends;if(!b.currentPrice)b.currentPrice=b.price;save();renderAdmin();renderLive();renderHomeLive();alert(`✅ Phuza ${b.name} LIVE ON HOME! Manual + Proxy enabled!`);}}
-function rejectBottle(id){bottles=bottles.filter(x=>x.id!=id);save();renderAdmin();renderHomeLive();}
-</script>
-</body>
-</html>
+<header><div class="brand">🍻 PHUZA AUCTION</div><div id="userStatus" class="small">Connecting…</div></header>
+<main>
+  <section class="hero">
+    <div style="font-size:38px">🍾🏆</div><h1>PHUZA AUCTION</h1>
+    <p>Shared auctions, live bids, referrals and a public leaderboard.</p>
+    <span class="tag">SUPABASE CONNECTED APP</span>
+  </section>
+  <div id="configWarning" class="notice hidden">Add your Supabase Project URL and publishable key in <b>config.js</b>, then reload.</div>
+  <div id="message" class="notice hidden" role="status"></div>
+  <section class="grid">
+    <div class="card">
+      <h2>Account</h2>
+      <div id="signedOut">
+        <label for="email">Email</label><input id="email" type="email" autocomplete="email" placeholder="you@example.com">
+        <label for="password">Password</label><input id="password" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters">
+        <label for="displayName">Display name (for registration)</label><input id="displayName" maxlength="40" placeholder="Your display name">
+        <label for="referralCode">Referral code (optional)</label><input id="referralCode" maxlength="16" placeholder="Friend's referral code">
+        <div class="row mobile"><button id="signupBtn">Register</button><button id="loginBtn" class="secondary">Log in</button></div>
+        <p class="small">Use a valid email. If email confirmation is enabled, confirm your address before logging in.</p>
+      </div>
+      <div id="signedIn" class="hidden">
+        <p>Signed in as <b id="signedInEmail"></b></p>
+        <p class="small">Your referral code: <b id="myReferralCode">—</b></p>
+        <button id="copyReferralBtn" class="gold">Copy referral link</button>
+        <button id="logoutBtn" class="secondary">Log out</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Shared activity</h2>
+      <div class="row"><div><div class="small">Open auctions</div><h2 id="auctionCount">0</h2></div><div><div class="small">Leaderboard users</div><h2 id="leaderCount">0</h2></div></div>
+      <p class="small">Auction and bid data is shared between users. Wallet transactions are read-only to normal users and must be created by trusted server-side processes.</p>
+      <div class="notice">This starter does not process real payments or withdrawals. Do not promise cash rewards or accept deposits until legal, payment, age-verification and security requirements are implemented.</div>
+    </div>
+  </section>
+  <section class="card">
+    <div class="between"><h2>Auctions</h2><button id="refreshBtn" class="secondary">Refresh</button></div>
+    <div id="createAuctionArea" class="hidden">
+      <h3>Create a listing</h3>
+      <div class="row mobile"><input id="newTitle" maxlength="100" placeholder="Listing title"><input id="newDescription" maxlength="500" placeholder="Description"></div>
+      <div class="row mobile"><input id="newStartPrice" type="number" min="1" step="0.01" placeholder="Starting price (R)"><button id="createAuctionBtn">Publish listing</button></div>
+      <p class="small">Listings are public. Only signed-in users can create listings.</p>
+    </div>
+    <div id="auctions" class="list"><p class="muted">Loading auctions…</p></div>
+  </section>
+  <section class="grid">
+    <div class="card"><h2>Leaderboard</h2><p class="small">Ranks users by confirmed referrals. No wallet amounts are exposed.</p><div id="leaderboard" class="list">Loading…</div></div>
+    <div class="card"><h2>My wallet records</h2><p class="small">If trusted administrators or server-side functions add ledger entries, you can view your own records here. You cannot create or edit wallet records from this page.</p><div id="wallet" class="list">Sign in to view your records.</div></div>
+  </section>
+  <section class="card"><h2>Security notes</h2><ul class="small"><li>Never put a database password, service-role key, or secret key in this website.</li><li>Run the SQL in <code>supabase/schema.sql</code> before testing.</li><li>Set an admin role only through trusted Supabase tooling/server-side code, never from a user-editable profile field.</li><li>If listings involve alcohol or other regulated goods, confirm local legal requirements and age-verification obligations before launch.</li></ul></section>
+</main>
+<footer>PHUZA AUCTION · Shared database starter · No real-money payments</footer>
+<script type="module" src="./app.js"></script>
+</body></html>
