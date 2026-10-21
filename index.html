@@ -3,48 +3,84 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PHUZA AUCTION - 5 LEVELS</title>
+<title>PHUZA - WhatsApp Login</title>
 <style>
 body{font-family:Arial;background:#111;color:#fff;margin:0;padding:10px}
-.card{background:#222;padding:12px;border-radius:10px;margin:10px 0}
-button{background:#ffcc00;color:#000;padding:10px 15px;border:0;border-radius:8px;font-weight:bold}
-input{padding:10px;border-radius:8px;border:0;width:90%;margin:5px 0}
-.badge{background:#ffcc00;color:#000;padding:2px 6px;border-radius:6px;font-size:12px}
+.card{background:#222;padding:15px;border-radius:12px;margin:10px 0;border:1px solid #333}
+button{background:#25D366;color:#000;padding:12px 20px;border:0;border-radius:8px;font-weight:bold;width:100%;margin:5px 0;font-size:16px}
+button.email{background:#ffcc00}
+input{padding:12px;border-radius:8px;border:0;width:92%;margin:6px 0;font-size:16px;background:#333;color:#fff}
+h2{color:#25D366;text-align:center}
+small{color:#aaa}
+.tab{display:flex;gap:5px;margin-bottom:10px}
+.tab button{flex:1;padding:10px}
+.active{border:2px solid #25D366!important}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 <body>
-<h2>🔥 PHUZA AUCTION - R5/R9/R13/R15/R20 Levels</h2>
+<h2>🔥 PHUZA AUCTION</h2>
 <div id="status" class="card">Loading...</div>
+
 <div class="card">
-<h3>Register / Login</h3>
-<input id="email" placeholder="Email: bigsamentertainmentrsa@gmail.com">
-<input id="password" type="password" placeholder="Password: Crazy12345">
-<input id="display_name" placeholder="Display Name">
-<input id="ref_code_input" placeholder="Ref Code (optional)">
-<br>
-<button onclick="register()">Register</button>
-<button onclick="login()">Login</button>
-<button onclick="logout()">Logout</button>
+<div class="tab">
+<button id="tabW" class="active" onclick="showTab('whatsapp')">WhatsApp + PIN</button>
+<button id="tabE" onclick="showTab('email')">Email</button>
 </div>
+
+<div id="whatsappBox">
+<h3>📱 WhatsApp Number + PIN</h3>
+<input id="wa_phone" placeholder="WhatsApp e.g. 0761234567" type="tel">
+<input id="wa_pin" placeholder="Create 4-digit PIN e.g. 1234" type="password" maxlength="6" inputmode="numeric">
+<input id="wa_name" placeholder="Your Name">
+<input id="wa_ref" placeholder="Referral Code (optional)">
+<button onclick="registerWhatsApp()">✅ Sign Up with WhatsApp</button>
+<button onclick="loginWhatsApp()" style="background:#128C7E;color:#fff">🔑 Login with WhatsApp</button>
+<small>Use same number + PIN next time to login</small>
+</div>
+
+<div id="emailBox" style="display:none">
+<h3>📧 Email (old method)</h3>
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+<input id="display_name" placeholder="Name">
+<input id="ref_code_input" placeholder="Ref Code">
+<button class="email" onclick="register()">Register Email</button>
+<button class="email" onclick="login()">Login Email</button>
+</div>
+
+<button onclick="logout()" style="background:#555;color:#fff;margin-top:10px">Logout</button>
+</div>
+
 <div class="card">
-<h3>Wallet: R<span id="balance">0</span></h3>
-<div>Your Code: <b id="mycode">---</b> | Level: <span id="mylevel">1</span> | Refs: <span id="myrefs">0</span></div>
+<h3>Wallet: R<span id="balance">0</span> | Code: <b id="mycode">---</b></h3>
+<div>Level: <span id="mylevel">1</span> | Refs: <span id="myrefs">0</span></div>
 </div>
+
 <div class="card">
 <h3>Deposit Voucher (Min R50)</h3>
 <input id="voucher_amount" type="number" placeholder="50">
 <input id="voucher_pin" placeholder="Voucher PIN">
 <button onclick="depositVoucher()">Deposit Voucher</button>
 </div>
+
 <div class="card">
-<h3>Create Auction (You must have balance)</h3>
-<input id="auction_title" placeholder="e.g. iPhone 13">
+<h3>Create Auction</h3>
+<input id="auction_title" placeholder="Item e.g. iPhone">
 <input id="auction_desc" placeholder="Description">
-<input id="auction_price" type="number" placeholder="Start Price e.g. 100">
+<input id="auction_price" type="number" placeholder="Start Price">
 <button onclick="createAuction()">Create Auction</button>
 </div>
+
 <div id="auctions" class="card"><h3>Auctions</h3>Loading...</div>
-<script src="./app.js"></script>
+<script src="./app.js?v=wa1"></script>
+<script>
+function showTab(t){
+  document.getElementById('whatsappBox').style.display = t==='whatsapp'?'block':'none';
+  document.getElementById('emailBox').style.display = t==='email'?'block':'none';
+  document.getElementById('tabW').className = t==='whatsapp'?'active':'';
+  document.getElementById('tabE').className = t==='email'?'active':'';
+}
+</script>
 </body>
 </html>
